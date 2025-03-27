@@ -77,6 +77,28 @@ namespace torali
     std::vector<std::string> sampleName;
   };
 
+  inline bool isValidChromosome(const std::string& chr) {
+    if (chr.substr(0, 3) == "chr") {
+      std::string num = chr.substr(3);
+      if (num.length() > 0) {
+        if (num == "X") return true;
+        try {
+          int chrNum = std::stoi(num);
+          return (chrNum >= 1 && chrNum <= 22);
+        } catch (...) {
+          return false;
+        }
+      }
+    }
+    try {
+      int chrNum = std::stoi(chr);
+      return (chrNum >= 1 && chrNum <= 22);
+    } catch (...) {
+      return (chr == "X");
+    }
+    return false;
+  }
+
 
   template<typename TConfigStruct>
   inline int dellyRun(TConfigStruct& c) {
@@ -321,9 +343,12 @@ namespace torali
       faidx_t* fai = fai_load(c.genome.string().c_str());
       for(int32_t refIndex=0; refIndex < hdr->n_targets; ++refIndex) {
 	std::string tname(hdr->target_name[refIndex]);
-	if (!faidx_has_seq(fai, tname.c_str())) {
-	  std::cerr << "BAM file chromosome " << hdr->target_name[refIndex] << " is NOT present in your reference file " << c.genome.string() << std::endl;
-	  return 1;
+  // only check the existence of chr1-22, chrX in the reference genome
+	if (isValidChromosome(tname)) {
+	  if (!faidx_has_seq(fai, tname.c_str())) {
+	    std::cerr << "BAM file chromosome " << hdr->target_name[refIndex] << " is NOT present in your reference file " << c.genome.string() << std::endl;
+	    return 1;
+	  }
 	}
       }
       fai_destroy(fai);
