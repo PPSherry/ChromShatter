@@ -242,7 +242,7 @@ namespace torali
     else if (svt == 3) return "DUP";
     else if (svt == 4) return "INS";
     else if (svt == 9) return "CNV";
-    else return "BND";
+    else return "TRA";
   }
 
   inline std::string

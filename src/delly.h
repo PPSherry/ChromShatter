@@ -34,7 +34,7 @@
 #include "msa.h" 
 #include "split.h"
 #include "shortpe.h"
-#include "modvcf.h" // if don't need output VCF, can comment this line
+// #include "modvcf.h" // Not needed for SV table output
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -99,6 +99,167 @@ namespace torali
     return false;
   }
 
+  // Determine if an SV has sufficient support to pass quality filters
+  inline bool _qualityPass(StructuralVariantRecord const& svRec) {
+    if (svRec.chr == svRec.chr2) {
+      // Intra-chromosomal
+      return !(((svRec.peSupport < 3) || (svRec.peMapQuality < 20)) && 
+               ((svRec.srSupport < 3) || (svRec.srMapQuality < 20)));
+    } else {
+      // Inter-chromosomal
+      return !(((svRec.peSupport < 5) || (svRec.peMapQuality < 20)) && 
+               ((svRec.srSupport < 5) || (svRec.srMapQuality < 20)));
+    }
+  }
+
+  // For comparing two samples to identify somatic SVs
+  template<typename TConfig, typename TStructuralVariantRecord>
+  inline void
+  outputSomaticSVTable(TConfig const& c, std::vector<TStructuralVariantRecord> const& svs1, std::vector<TStructuralVariantRecord> const& svs2)
+  {
+    // Open file for writing
+    std::ofstream svFile;
+    svFile.open(c.outfile.string().c_str());
+    
+    // Get BAM header for chromosome names
+    samFile* samfile = sam_open(c.files[0].string().c_str(), "r");
+    bam_hdr_t* hdr = sam_hdr_read(samfile);
+    
+    // Write header
+    svFile << "CHR1\tPOS1\tCHR2\tPOS2\tSVTYPE\tSTRAND1\tSTRAND2\tPRECISE\tFILTER\tVARIANT_TYPE" << std::endl;
+    
+    // Process SVs from sample1 (tumor)
+    for(typename std::vector<TStructuralVariantRecord>::const_iterator svIter = svs1.begin(); svIter != svs1.end(); ++svIter) {
+      // Skip if no support
+      if ((svIter->srSupport == 0) && (svIter->peSupport == 0)) continue;
+      
+      // Get chromosome names
+      std::string chr1 = hdr->target_name[svIter->chr];
+      std::string chr2 = hdr->target_name[svIter->chr2];
+      
+      // Get SV type and orientation
+      std::string svtype = _addID(svIter->svt);
+      std::string orientation = _addOrientation(svIter->svt);
+      
+      // Get strand information from orientation
+      std::string strand1, strand2;
+      if (orientation == "3to3") { strand1 = "+"; strand2 = "+"; }  // head-to-head inversion (+/+)
+      else if (orientation == "5to5") { strand1 = "-"; strand2 = "-"; }  // tail-to-tail inversion (-/-)
+      else if (orientation == "3to5") { strand1 = "+"; strand2 = "-"; }  // deletion-like (+/-)
+      else if (orientation == "5to3") { strand1 = "-"; strand2 = "+"; }  // duplication-like (-/+)
+      else { strand1 = "."; strand2 = "."; } // insertion
+      
+      // Quality filter
+      std::string filter = _qualityPass(*svIter) ? "PASS" : "LowQual";
+      
+      // Find matching SV in normal sample (sample2)
+      bool is_somatic = true;  // Assume somatic until proven otherwise
+      bool found_match = false;
+      
+      // Define distance threshold for finding nearby SVs
+      const int max_distance = 500;  // Maximum distance to consider for matching normal SVs
+      
+      // Define variables to track best match
+      double best_match_score = 0.0;
+      const TStructuralVariantRecord* best_match = nullptr;
+
+      // Use lower_bound on sorted svs2 to quickly find potential matching SVs in normal sample
+      // Create a temporary SV for binary search
+      TStructuralVariantRecord searchSV;
+      searchSV.chr = svIter->chr;
+      searchSV.chr2 = svIter->chr2;
+      searchSV.svt = svIter->svt;
+      searchSV.svStart = std::max(0, svIter->svStart - max_distance);  // Search start position (tumor SV - 500bp)
+      
+      // Use binary search to quickly locate potential matches in normal sample
+      typename std::vector<TStructuralVariantRecord>::const_iterator lowerBound = 
+          std::lower_bound(svs2.begin(), svs2.end(), searchSV);
+      
+      // Only check SVs from lower_bound that are within 1000bp window around tumor SV
+      for(; lowerBound != svs2.end(); ++lowerBound) {
+        // Stop searching if we've moved beyond the search window
+        if (lowerBound->chr != svIter->chr || lowerBound->svStart > svIter->svStart + max_distance)
+          break;
+        
+        // Must be on same chromosome
+        if (svIter->chr2 != lowerBound->chr2) 
+          continue;
+        
+        // Must be same SV type
+        if (svIter->svt != lowerBound->svt) 
+          continue;
+        
+        // Calculate breakpoint distances
+        int start_distance = std::abs(svIter->svStart - lowerBound->svStart);
+        int end_distance = std::abs(svIter->svEnd - lowerBound->svEnd);
+        
+        // Check if breakpoints are within distance threshold
+        if (start_distance > max_distance || end_distance > max_distance)
+          continue;
+        
+        // Calculate confidence interval overlap
+        int start_min1 = svIter->svStart + svIter->ciposlow;
+        int start_max1 = svIter->svStart + svIter->ciposhigh;
+        int start_min2 = lowerBound->svStart + lowerBound->ciposlow;
+        int start_max2 = lowerBound->svStart + lowerBound->ciposhigh;
+        
+        int end_min1 = svIter->svEnd + svIter->ciendlow;
+        int end_max1 = svIter->svEnd + svIter->ciendhigh;
+        int end_min2 = lowerBound->svEnd + lowerBound->ciendlow;
+        int end_max2 = lowerBound->svEnd + lowerBound->ciendhigh;
+        
+        // Check for confidence interval overlap
+        bool start_overlap = (start_min1 <= start_max2 && start_min2 <= start_max1);
+        bool end_overlap = (end_min1 <= end_max2 && end_min2 <= end_max1);
+        
+        if (start_overlap && end_overlap) {
+          // Calculate a match score based on breakpoint distance and support
+          double match_score = 1.0 / (1.0 + start_distance + end_distance);
+          
+          // If better match than current best, update
+          if (match_score > best_match_score) {
+            best_match_score = match_score;
+            best_match = &(*lowerBound);
+            found_match = true;
+          }
+        }
+      }
+      
+      // If we found a matching SV in normal sample
+      if (found_match && best_match) {
+        // Check if normal sample has sufficient support to call this germline
+        bool normal_good_support = (best_match->peSupport >= 2 || best_match->srSupport >= 2);
+        
+        if (normal_good_support) {
+          is_somatic = false;  // If normal has good support, it's likely germline
+        } else {
+          // Even if normal support is weak but the confident intervals overlap well,
+          // it's likely the same SV, just with less coverage in normal
+          is_somatic = true;
+        }
+      } else {
+        // No matching SV found in normal - likely a true somatic event
+        is_somatic = true;
+      }
+      
+      // Output to file
+      svFile << chr1 << "\t" 
+             << svIter->svStart << "\t" 
+             << chr2 << "\t" 
+             << svIter->svEnd << "\t" 
+             << svtype << "\t" 
+             << strand1 << "\t" 
+             << strand2 << "\t" 
+             << (svIter->precise ? "PRECISE" : "IMPRECISE") << "\t" 
+             << filter << "\t" 
+             << (is_somatic ? "SOMATIC" : "GERMLINE") << std::endl;
+    }
+    
+    // Clean up
+    bam_hdr_destroy(hdr);
+    sam_close(samfile);
+    svFile.close();
+  }
 
   template<typename TConfigStruct>
   inline int dellyRun(TConfigStruct& c) {
@@ -165,7 +326,7 @@ namespace torali
 
       // Sort and merge PE and SR calls
       mergeSort(svs, srSVs);
-    } else vcfParse(c, hdr, svs);
+    } 
     // Clean-up
     bam_hdr_destroy(hdr);
     sam_close(samfile);
@@ -175,29 +336,56 @@ namespace torali
     uint32_t cliqueCount = 0;
     for(typename TVariants::iterator svIt = svs.begin(); svIt != svs.end(); ++svIt, ++cliqueCount) svIt->id = cliqueCount;
     
-    // Annotate junction reads
-    typedef std::vector<JunctionCount> TSVJunctionMap;
-    typedef std::vector<TSVJunctionMap> TSampleSVJunctionMap;
-    TSampleSVJunctionMap jctMap;
+    // Process and output SVs
+    boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+    std::cerr << '[' << boost::posix_time::to_simple_string(now) << "] " << "Processing and outputting SVs" << std::endl;
     
-    // Annotate spanning coverage
-    typedef std::vector<SpanningCount> TSVSpanningMap;
-    typedef std::vector<TSVSpanningMap> TSampleSVSpanningMap;
-    TSampleSVSpanningMap spanMap;
-
-    // Annotate coverage
-    typedef std::vector<ReadCount> TSVReadCount;
-    typedef std::vector<TSVReadCount> TSampleSVReadCount;
-    TSampleSVReadCount rcMap;
+    // Check if we have two files - only tumor-normal comparison is supported
+    if (c.files.size() != 2) {
+      std::cerr << "Error: This program requires exactly two BAM files (tumor and normal)." << std::endl;
+      return 1;
+    }
     
-    // SV Genotyping
-    if (!svs.empty()) annotateCoverage(c, sampleLib, svs, rcMap, jctMap, spanMap);
+    // Discover SVs in second sample (normal)
+    TVariants svs2;
     
-    // VCF output
-    vcfOutput(c, svs, jctMap, rcMap, spanMap);
+    // Open header for second file
+    samFile* samfile2 = sam_open(c.files[1].string().c_str(), "r");
+    bam_hdr_t* hdr2 = sam_hdr_read(samfile2);
+    
+    // Perform discovery on second sample
+    // Split-read SVs
+    TVariants srSVs2;
+    
+    // SR Store
+    {
+      typedef std::pair<int32_t, std::size_t> TPosRead;
+      typedef boost::unordered_map<TPosRead, int32_t> TPosReadSV;
+      typedef std::vector<TPosReadSV> TGenomicPosReadSV;
+      TGenomicPosReadSV srStore2(c.nchr, TPosReadSV());
+      scanPEandSR(c, validRegions, svs2, srSVs2, srStore2, sampleLib);
+      
+      // Assemble split-read calls
+      assembleSplitReads(c, validRegions, srStore2, srSVs2);
+    }
+    
+    // Sort and merge PE and SR calls
+    mergeSort(svs2, srSVs2);
+    
+    // Clean-up
+    bam_hdr_destroy(hdr2);
+    sam_close(samfile2);
+    
+    // Re-number SVs
+    sort(svs2.begin(), svs2.end());
+    cliqueCount = 0;
+    for(typename TVariants::iterator svIt = svs2.begin(); svIt != svs2.end(); ++svIt, ++cliqueCount) svIt->id = cliqueCount;
+    
+    // Generate SV table with somatic information
+    outputSomaticSVTable(c, svs, svs2);
     
     // Output library statistics
-    boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+    now = boost::posix_time::second_clock::local_time();
     std::cerr << '[' << boost::posix_time::to_simple_string(now) << "] " << "Sample statistics" << std::endl;
     for(uint32_t file_c = 0; file_c < c.files.size(); ++file_c) {
       std::cerr << "Sample:" << c.sampleName[file_c] << ",ReadSize=" << sampleLib[file_c].rs << ",Median=" << sampleLib[file_c].median << ",MAD=" << sampleLib[file_c].mad << ",UniqueDiscordantPairs=" << sampleLib[file_c].abnormal_pairs << std::endl;
@@ -226,7 +414,7 @@ namespace torali
       ("svtype,t", boost::program_options::value<std::string>(&svtype)->default_value("ALL"), "SV type to compute [DEL, INS, DUP, INV, BND, ALL]")
       ("genome,g", boost::program_options::value<boost::filesystem::path>(&c.genome), "genome fasta file")
       ("exclude,x", boost::program_options::value<boost::filesystem::path>(&c.exclude), "file with regions to exclude")
-      ("outfile,o", boost::program_options::value<boost::filesystem::path>(&c.outfile), "BCF output file")
+      ("outfile,o", boost::program_options::value<boost::filesystem::path>(&c.outfile), "SV table output file")
       ;
     
     boost::program_options::options_description disc("Discovery options");
@@ -238,14 +426,6 @@ namespace torali
       ("min-clique-size,z", boost::program_options::value<uint32_t>(&c.minCliqueSize)->default_value(2), "min. PE/SR clique size")
       ("minrefsep,m", boost::program_options::value<uint32_t>(&c.minRefSep)->default_value(25), "min. reference separation")
       ("maxreadsep,n", boost::program_options::value<uint32_t>(&c.maxReadSep)->default_value(40), "max. read separation")
-      ;
-    
-    boost::program_options::options_description geno("Genotyping options");
-    geno.add_options()
-      ("vcffile,v", boost::program_options::value<boost::filesystem::path>(&c.vcffile), "input VCF/BCF file for genotyping")
-      ("geno-qual,u", boost::program_options::value<uint16_t>(&c.minGenoQual)->default_value(5), "min. mapping quality for genotyping")
-      ("dump,d", boost::program_options::value<boost::filesystem::path>(&c.dumpfile), "gzipped output file for SV-reads (optional)")
-      ("max-geno-count,a", boost::program_options::value<uint32_t>(&c.maxGenoReadCount)->default_value(250), "max. number of reads aligned for SR genotyping")
       ;
 
     // Define hidden options
@@ -261,9 +441,9 @@ namespace torali
     
     // Set the visibility
     boost::program_options::options_description cmdline_options;
-    cmdline_options.add(generic).add(disc).add(geno).add(hidden);
+    cmdline_options.add(generic).add(disc).add(hidden);
     boost::program_options::options_description visible_options;
-    visible_options.add(generic).add(disc).add(geno);
+    visible_options.add(generic).add(disc);
     boost::program_options::variables_map vm;
     boost::program_options::store(boost::program_options::command_line_parser(argc, argv).options(cmdline_options).positional(pos_args).run(), vm);
     boost::program_options::notify(vm);
@@ -271,7 +451,8 @@ namespace torali
     // Check command line arguments
     if ((vm.count("help")) || (!vm.count("input-file")) || (!vm.count("genome"))) { 
       std::cerr << std::endl;
-      std::cerr << "Usage: delly " << argv[0] << " [OPTIONS] -g <ref.fa> <sample1.sort.bam> <sample2.sort.bam> ..." << std::endl;
+      std::cerr << "Usage: delly " << argv[0] << " [OPTIONS] -g <ref.fa> <tumor.sort.bam> <normal.sort.bam>" << std::endl;
+      std::cerr << "For somatic SV calling: first sample is tumor, second sample is control" << std::endl;
       std::cerr << visible_options << "\n";
       return 0;
     }
@@ -281,19 +462,34 @@ namespace torali
       std::cerr << "Please specify a valid SV type, i.e., -t INV or -t DEL,INV without spaces." << std::endl;
       return 1;
     }
-    //typedef std::set<int32_t> TSvSetTmp;
-    //for(typename TSvSetTmp::iterator itst = c.svtset.begin(); itst!=c.svtset.end(); ++itst) std::cerr << *itst << std::endl;
-    //std::cerr << c.svtset.size() << std::endl;
     
-    // Dump PE and SR support?
-    if (vm.count("dump")) c.hasDumpFile = true;
-    else c.hasDumpFile = false;
-
-    // Clique size
-    if (c.minCliqueSize < 2) c.minCliqueSize = 2;
+    // Check input files (exactly 2 files required)
+    if (c.files.size() != 2) {
+      std::cerr << "Error: Exactly two input BAM files are required (tumor and normal)." << std::endl;
+      return 1;
+    }
     
-    // Check quality cuts
-    if (c.minMapQual > c.minTraQual) c.minTraQual = c.minMapQual;
+    // Exclude file
+    if (vm.count("exclude")) {
+      if (!(boost::filesystem::exists(c.exclude) && boost::filesystem::is_regular_file(c.exclude) && boost::filesystem::file_size(c.exclude))) {
+	std::cerr << "Exclude file is missing: " << c.exclude.string() << std::endl;
+	return 1;
+      }
+      c.hasExcludeFile = true;
+    } else c.hasExcludeFile = false;
+    
+    // Input VCF (not supported in this modified version)
+    c.hasVcfFile = false;
+    
+    // Default outfile
+    if (!vm.count("outfile")) c.outfile = "somatic_sv_calls.tsv";
+    
+    // Show cmd
+    boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+    std::cerr << '[' << boost::posix_time::to_simple_string(now) << "] ";
+    std::cerr << "delly ";
+    for(int i=0; i<argc; ++i) { std::cerr << argv[i] << ' '; }
+    std::cerr << std::endl;
     
     // Check reference
     if (!(boost::filesystem::exists(c.genome) && boost::filesystem::is_regular_file(c.genome) && boost::filesystem::file_size(c.genome))) {
@@ -361,55 +557,7 @@ namespace torali
     }
     checkSampleNames(c);
     
-    // Check exclude file
-    if (vm.count("exclude")) {
-      if (!(boost::filesystem::exists(c.exclude) && boost::filesystem::is_regular_file(c.exclude) && boost::filesystem::file_size(c.exclude))) {
-	std::cerr << "Exclude file is missing: " << c.exclude.string() << std::endl;
-	return 1;
-      }
-      c.hasExcludeFile = true;
-    } else c.hasExcludeFile = false;
-    
-    // Check input VCF file
-    if (vm.count("vcffile")) {
-      if (!(boost::filesystem::exists(c.vcffile) && boost::filesystem::is_regular_file(c.vcffile) && boost::filesystem::file_size(c.vcffile))) {
-	std::cerr << "Input VCF/BCF file is missing: " << c.vcffile.string() << std::endl;
-	return 1;
-      }
-      htsFile* ifile = bcf_open(c.vcffile.string().c_str(), "r");
-      if (ifile == NULL) {
-	std::cerr << "Fail to open file " << c.vcffile.string() << std::endl;
-	return 1;
-      }
-      bcf_hdr_t* hdr = bcf_hdr_read(ifile);
-      if (hdr == NULL) {
-	std::cerr << "Fail to open index file " << c.vcffile.string() << std::endl;
-	return 1;
-      }
-      bcf_hdr_destroy(hdr);
-      bcf_close(ifile);
-      c.hasVcfFile = true;
-    } else c.hasVcfFile = false;
-    
-    // Check outfile
-    if (!vm.count("outfile")) c.outfile = "-";
-    else {
-      if (c.outfile.string() != "-") {
-	if (!_outfileValid(c.outfile)) return 1;
-      }
-    }
-    
-    // Show cmd
-    boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
-    std::cerr << '[' << boost::posix_time::to_simple_string(now) << "] ";
-    std::cerr << "delly ";
-    for(int i=0; i<argc; ++i) { std::cerr << argv[i] << ' '; }
-    std::cerr << std::endl;
-    
-    // Always ignore reads of mapping quality <5 for genotyping, otherwise het. is more likely!
-    if (c.minGenoQual<5) c.minGenoQual=5;
-    
-    // Run main program
+    // Run the main program
     c.aliscore = DnaScore<int>(5, -4, -10, -1);
     c.flankQuality = 0.95;
     c.minimumFlankSize = 13;
