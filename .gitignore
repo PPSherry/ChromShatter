@@ -1,1 +1,4 @@
 test-picture/
+pdf_convert/
+tmp.*
+.DS_Store
