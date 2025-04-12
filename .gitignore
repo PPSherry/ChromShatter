@@ -1,4 +1,5 @@
 test-picture/
 pdf_convert/
-tmp.*
+region_images/
+
 .DS_Store
