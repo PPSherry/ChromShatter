@@ -1,5 +1,7 @@
 test-picture/
 pdf_convert/
 region_images/
+__pycache__/
 
 .DS_Store
+tmp.*
