@@ -138,7 +138,7 @@ def extract_event_info(event_text, donor_ids=None):
             if len(position_parts) > 1:
                 position_text = position_parts[1].strip()
                 # 提取染色体位置格式，如 "1:120690998−248630158"
-                position_match = re.search(r'(\d+:\d+[−-]\d+)', position_text)
+                position_match = re.search(r'([0-9XY]+:\d+[−-]\d+)', position_text)
                 if position_match:
                     info["position"] = position_match.group(1)
     
