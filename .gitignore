@@ -1,7 +1,8 @@
-test-picture/
+SV_graph.high-confidence/
 pdf_convert/
 region_images/
 __pycache__/
 
 .DS_Store
 tmp.*
+*.zip
