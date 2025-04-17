@@ -13,8 +13,6 @@ if (length(args) < 2) {
 sv_file <- args[1]
 cnv_file <- args[2]
 
-# extract the sample name
-sample_name <- strsplit(basename(sv_file), "\\.")[[1]][1]
 
 # ----------------------------
 # 2. SV preprocessing
@@ -157,45 +155,81 @@ results$number_intrachromosomal_SVs <- results %>%
 # the code below provided by ahwanpandey
 
 # 1st High Confidence filter
-filt1 = results$number_intrachromosomal_SVs >= 6
-filt2 = results$max_number_oscillating_CN_segments_2_states >= 7
-filt3 = results$pval_fragment_joins >= 0.05
-filt4 = (results$chr_breakpoint_enrichment <= 0.05) | (results$pval_exp_chr <= 0.05)
-HC1 = (filt1) & (filt2) & (filt3) & (filt4)
-HC1[is.na(HC1)] <- FALSE
-results$HC1 <- HC1
+intra_chr_num_6 = results$number_intrachromosomal_SVs >= 6
+max_num_cn2_num_7 = results$max_number_oscillating_CN_segments_2_states >= 7
+equal_distribution_SVtype = results$pval_fragment_joins >= 0.05
+breakpoint_enrich = (results$chr_breakpoint_enrichment <= 0.05) | (results$pval_exp_chr <= 0.05)
+
+HC_standard = rep("PASS", nrow(results))
+for (i in 1:nrow(results)) {
+  failed_criteria = c()
+  if (is.na(intrachr_num_6[i]) || !intrachr_num_6[i]) failed_criteria = c(failed_criteria, "intrachr_num_6")
+  if (is.na(max_num_cn2_num_7[i]) || !max_num_cn2_num_7[i]) failed_criteria = c(failed_criteria, "max_num_cn2_num_7")
+  if (is.na(equal_distribution_SVtype[i]) || !equal_distribution_SVtype[i]) failed_criteria = c(failed_criteria, "equal_distribution_SVtype")
+  if (is.na(breakpoint_enrich[i]) || !breakpoint_enrich[i]) failed_criteria = c(failed_criteria, "breakpoint_enrich")
+  if (length(failed_criteria) > 0) HC_standard[i] = paste(failed_criteria, collapse=",")
+}
+results$HC_standard <- HC_standard
 
 # 2nd High Confidence filter
-filt1 = results$number_intrachromosomal_SVs >= 3
-filt2 = results$number_TRA >= 4
-filt3 = results$max_number_oscillating_CN_segments_2_states >= 7
-filt4 = results$pval_fragment_joins >= 0.05
-HC2 = (filt1) & (filt2) & (filt3) & (filt4)
-HC2[is.na(HC2)] <- FALSE
-results$HC2 <- HC2
+intra_inter_chr_num_7 = (results$number_intrachromosomal_SVs >= 3) & (results$number_TRA >= 4)
+max_num_cn2_num_7 = results$max_number_oscillating_CN_segments_2_states >= 7
+equal_distribution_SVtype = results$pval_fragment_joins >= 0.05
+
+HC_supplement1 = rep("PASS", nrow(results))
+for (i in 1:nrow(results)) {
+  failed_criteria = c()
+  if (is.na(intra_inter_chr_num_7[i]) || !intra_inter_chr_num_7[i]) failed_criteria = c(failed_criteria, "intra_inter_chr_num_7")
+  if (is.na(max_num_cn2_num_7[i]) || !max_num_cn2_num_7[i]) failed_criteria = c(failed_criteria, "max_num_cn2_num_7")
+  if (is.na(equal_distribution_SVtype[i]) || !equal_distribution_SVtype[i]) failed_criteria = c(failed_criteria, "equal_distribution_SVtype")
+  if (length(failed_criteria) > 0) HC_supplement1[i] = paste(failed_criteria, collapse=",")
+}
+results$HC_supplement1 <- HC_supplement1
 
 # 3rd High Confidence filter
-filt1 = results$clusterSize_including_TRA >= 40
-filt2 = results$pval_fragment_joins >= 0.05
-HC3gte40 = (filt1) & (filt2)
-HC3gte40[is.na(HC3gte40)] <- FALSE
-results$HC3gte40 <- HC3gte40
+cluster_size_gte40 = results$clusterSize_including_TRA >= 40
+equal_distribution_SVtype = results$pval_fragment_joins >= 0.05
+
+HC_supplement2 = rep("PASS", nrow(results))
+for (i in 1:nrow(results)) {
+  failed_criteria = c()
+  if (is.na(cluster_size_gte40[i]) || !cluster_size_gte40[i]) failed_criteria = c(failed_criteria, "cluster_size_gte40")
+  if (is.na(equal_distribution_SVtype[i]) || !equal_distribution_SVtype[i]) failed_criteria = c(failed_criteria, "equal_distribution_SVtype")
+  if (length(failed_criteria) > 0) HC_supplement2[i] = paste(failed_criteria, collapse=",")
+}
+results$HC_supplement2 <- HC_supplement2
 
 # Low Confidence filter
-filt1 = results$number_intrachromosomal_SVs >= 6
-filt2 = (results$max_number_oscillating_CN_segments_2_states >= 4) & (results$max_number_oscillating_CN_segments_2_states <= 6)
-filt3 = results$pval_fragment_joins >= 0.05
-filt4 = (results$chr_breakpoint_enrichment <= 0.05) | (results$pval_exp_chr <= 0.05)
-LC1 = (filt1) & (filt2) & (filt3) & (filt4)
-LC1[is.na(LC1)] <- FALSE
-results$LC1 <- LC1
+intra_chr_num_6 = results$number_intrachromosomal_SVs >= 6
+max_num_cn2_num_4to6 = (results$max_number_oscillating_CN_segments_2_states >= 4) & (results$max_number_oscillating_CN_segments_2_states <= 6)
+equal_distribution_SVtype = results$pval_fragment_joins >= 0.05
+breakpoint_enrich = (results$chr_breakpoint_enrichment <= 0.05) | (results$pval_exp_chr <= 0.05)
+
+LC = rep("PASS", nrow(results))
+for (i in 1:nrow(results)) {
+  failed_criteria = c()
+  if (is.na(intra_chr_num_6[i]) || !intra_chr_num_6[i]) failed_criteria = c(failed_criteria, "intra_chr_num_6")
+  if (is.na(max_num_cn2_num_4to6[i]) || !max_num_cn2_num_4to6[i]) failed_criteria = c(failed_criteria, "max_num_cn2_num_4to6")
+  if (is.na(equal_distribution_SVtype[i]) || !equal_distribution_SVtype[i]) failed_criteria = c(failed_criteria, "equal_distribution_SVtype")
+  if (is.na(breakpoint_enrich[i]) || !breakpoint_enrich[i]) failed_criteria = c(failed_criteria, "breakpoint_enrich")
+  if (length(failed_criteria) > 0) LC[i] = paste(failed_criteria, collapse=",")
+}
+results$LC <- LC
 
 # results$HCany if TRUE means a Chromothripsis event has occurred
-results$HCany <- results$HC1 | results$HC2 | results$HC3gte40
+results$chromothripsis <- results$HC_standard == "PASS" | results$HC_supplement1 == "PASS" | results$HC_supplement2 == "PASS"
 
-num_chrom_HCany <- sum(results$HCany, na.rm = TRUE)
+# 结果标记
+results$chromothripsis_status <- "Not Significant"
+for (i in 1:nrow(results)) {
+  if (results$HC_standard[i] == "PASS" || results$HC_supplement1[i] == "PASS" || results$HC_supplement2[i] == "PASS") {
+    results$chromothripsis_status[i] <- "High Confidence"
+  } else if (results$LC[i] == "PASS") {
+    results$chromothripsis_status[i] <- "Low Confidence"
+  }
+}
 
 # ----------------------------
 # 5. Final Output
 # ----------------------------
-cat(sample_name, num_chrom_HCany, sep = "\t")
+
