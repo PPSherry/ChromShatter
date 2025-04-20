@@ -145,17 +145,20 @@ CN_data <- CNVsegs(chrom = as.character(cnv_shatter$chrom),
 invisible(capture.output(chromothripsis <- shatterseek(SV.sample = SV_data, seg.sample = CN_data, genome = "hg38")))
 
 # 4.3 set the cut-offs
-# create a column with the intrachromosomal SVs count for the cluster
-results <- chromothripsis@chromSummary
-results$number_intrachromosomal_SVs <- results %>% 
-  dplyr::select(number_DEL, number_DUP, number_h2hINV, number_t2tINV) %>% 
-  apply(1, sum)
+# maxClusterSize is needed for criteria
+chromSummary <- chromothripsis@chromSummary
+chromSummary$original_order <- 1:nrow(chromSummary)
+results <- merge(chromSummary, 
+                      chromothripsis@detail$maxClusterSize, 
+                      by = "chrom")
+results <- results[order(results$original_order), ]
+results$original_order <- NULL
 
 # the cutoffs are recommended values from ShatterSeek
 # the code below provided by ahwanpandey
 
 # 1st High Confidence filter
-intra_chr_num_6 = results$number_intrachromosomal_SVs >= 6
+intra_chr_num_6 = results$clusterSize >= 6
 max_num_cn2_num_7 = results$max_number_oscillating_CN_segments_2_states >= 7
 equal_distribution_SVtype = results$pval_fragment_joins >= 0.05
 breakpoint_enrich = (results$chr_breakpoint_enrichment <= 0.05) | (results$pval_exp_chr <= 0.05)
@@ -172,7 +175,7 @@ for (i in 1:nrow(results)) {
 results$HC_standard <- HC_standard
 
 # 2nd High Confidence filter
-intra_inter_chr_num_7 = (results$number_intrachromosomal_SVs >= 3) & (results$number_TRA >= 4)
+intra_inter_chr_num_7 = (results$clusterSize >= 3) & (results$number_TRA >= 4)
 max_num_cn2_num_7 = results$max_number_oscillating_CN_segments_2_states >= 7
 equal_distribution_SVtype = results$pval_fragment_joins >= 0.05
 
@@ -200,7 +203,7 @@ for (i in 1:nrow(results)) {
 results$HC_supplement2 <- HC_supplement2
 
 # Low Confidence filter
-intra_chr_num_6 = results$number_intrachromosomal_SVs >= 6
+intra_chr_num_6 = results$clusterSize >= 6
 max_num_cn2_num_4to6 = (results$max_number_oscillating_CN_segments_2_states >= 4) & (results$max_number_oscillating_CN_segments_2_states <= 6)
 equal_distribution_SVtype = results$pval_fragment_joins >= 0.05
 breakpoint_enrich = (results$chr_breakpoint_enrichment <= 0.05) | (results$pval_exp_chr <= 0.05)
@@ -216,18 +219,15 @@ for (i in 1:nrow(results)) {
 }
 results$LC <- LC
 
-# results$HCany if TRUE means a Chromothripsis event has occurred
-results$chromothripsis <- results$HC_standard == "PASS" | results$HC_supplement1 == "PASS" | results$HC_supplement2 == "PASS"
-
-# 结果标记
-results$chromothripsis_status <- "Not Significant"
-for (i in 1:nrow(results)) {
-  if (results$HC_standard[i] == "PASS" || results$HC_supplement1[i] == "PASS" || results$HC_supplement2[i] == "PASS") {
-    results$chromothripsis_status[i] <- "High Confidence"
-  } else if (results$LC[i] == "PASS") {
-    results$chromothripsis_status[i] <- "Low Confidence"
-  }
-}
+# mark the chromothripsis status
+results$chromothripsis_status <-
+  ifelse(
+    (results$HC_standard  == "PASS") |
+    (results$HC_supplement1 == "PASS") |
+    (results$HC_supplement2 == "PASS"),
+    "High Confidence",
+    ifelse(results$LC == "PASS", "Low Confidence", "Not Significant")
+  )
 
 # ----------------------------
 # 5. Final Output
