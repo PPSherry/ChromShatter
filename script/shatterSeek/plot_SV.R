@@ -2,7 +2,6 @@
 #' 
 #' @param ShatterSeek_output the output of the function shatterseek
 #' @param chr chromosome for which the plot will be generated
-#' @param sample_name name of the sample to be shown in the table
 #' @param DEL_color colour to show the deletion-like SVs
 #' @param DUP_color colour to show the duplication-like SVs
 #' @param t2tINV_color colour to show the t2tINV SVs
@@ -17,7 +16,6 @@
 #' 
 #' @export
 plot_sv_arcs <- function(ShatterSeek_output, chr,
-                        sample_name="",
                         DEL_color='darkorange1', DUP_color='blue1',
                         t2tINV_color="forestgreen", h2hINV_color="black",
                         arc_size=0.2,
@@ -39,8 +37,8 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
                                       panel.grid.minor = element_blank(), 
                                       legend.title=element_blank(),
                                       plot.background = element_blank(),
-                                      axis.line.x = element_line(size = 0.5, linetype = "solid", colour = "black"),
-                                      axis.line.y = element_line(size = 0.5, linetype = "solid", colour = "black"))  
+                                      axis.line.x = element_line(linewidth = 0.5, linetype = "solid", colour = "black"),
+                                      axis.line.y = element_line(linewidth = 0.5, linetype = "solid", colour = "black"))  
   
   # 处理染色体名称
   cand = gsub("chr","",chr)
@@ -105,7 +103,7 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   }
   
   # 添加水平参考线
-  SV_plot = SV_plot + geom_hline(yintercept=y1,size=0.5) + geom_hline(yintercept=y2,size=0.5) 
+  SV_plot = SV_plot + geom_hline(yintercept=y1,linewidth=0.5) + geom_hline(yintercept=y2,linewidth=0.5) 
   
   # 处理大数据集
   if(nrow(df)>300){options(expressions= 100000)}
@@ -117,7 +115,7 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   now = df[df$SVtype == "DUP",]
   if (nrow(now) > 0){
     for (i in 1:nrow(now)){
-      SV_plot = SV_plot + geom_curve(size=arc_size,data = now[i,], 
+      SV_plot = SV_plot + geom_curve(linewidth=arc_size,data = now[i,], 
                                     aes(x = pos1, y = y1, xend = pos2, yend = y1), 
                                     curvature = now$curv[i],colour=DUP_color,ncp=8)
     }
@@ -130,7 +128,7 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   now = df[df$SVtype == "DEL",]
   if (nrow(now) > 0){
     for (i in 1:nrow(now)){
-      SV_plot = SV_plot + geom_curve(size=arc_size,data = now[i,], 
+      SV_plot = SV_plot + geom_curve(linewidth=arc_size,data = now[i,], 
                                     aes(x = pos1, y = y1, xend = pos2, yend = y1), 
                                     curvature = -1*now$curv[i],colour=DEL_color) 
     }
@@ -143,7 +141,7 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   now = df[df$SVtype == "t2tINV",]
   if (nrow(now) > 0){
     for (i in 1:nrow(now)){
-      SV_plot = SV_plot + geom_curve(size=arc_size,data = now[i,], 
+      SV_plot = SV_plot + geom_curve(linewidth=arc_size,data = now[i,], 
                                     aes(x = pos1, y = y2, xend = pos2, yend = y2), 
                                     curvature = now$curv[i],colour=t2tINV_color) 
     }
@@ -156,7 +154,7 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   now = df[df$SVtype == "h2hINV",]
   if (nrow(now) > 0){
     for (i in 1:nrow(now)){
-      SV_plot = SV_plot + geom_curve(size=arc_size,data = now[i,], 
+      SV_plot = SV_plot + geom_curve(linewidth=arc_size,data = now[i,], 
                                     aes(x = pos1, y = y2, xend = pos2, yend = y2), 
                                     curvature = -1*now$curv[i],colour=h2hINV_color) 
     }
@@ -168,11 +166,14 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   # 应用主题和坐标设置
   SV_plot = SV_plot + theme(axis.ticks.x=element_blank(),
                            panel.border = element_blank(),
-                           axis.title.y=element_text(colour="white"),
-                           axis.text.y=element_text(colour="white"),
-                           axis.ticks.y=element_line(colour="white")) + 
-    scale_x_continuous(expand = c(0.01,0.01), 
-                      labels = function(x){paste(x/1000000,"MB")}) + 
+                           axis.title.y=element_blank(),
+                           axis.text.y=element_blank(),
+                           axis.ticks.y=element_blank(),
+                           # 隐藏X轴文本和标记
+                           axis.text.x=element_blank(),
+                           # 确保Y轴完全不可见
+                           axis.line.y=element_blank()) + 
+    scale_x_continuous(expand = c(0.01,0.01)) + 
     coord_cartesian(xlim=c(min_coord,max_coord))
   
   # 添加颜色图例

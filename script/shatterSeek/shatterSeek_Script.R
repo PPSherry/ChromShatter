@@ -4,15 +4,21 @@ library(GenomicRanges)
 library(dplyr)
 library(stringr)
 library(ShatterSeek)
+library(ggplot2)
 
-# 1. get SV and CNV file path from command line arguments
+# import the plot_SV.R file
+source("/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/script/shatterSeek/plot_SV.R")
+
+# 1. Get command line arguments
 args <- commandArgs(trailingOnly = TRUE)
-if (length(args) < 2) {
-  stop("Usage: Rscript shatterSeek_Script.R <SV_file> <CNV_file>")
+if (length(args) < 5) {
+  stop("Usage: Rscript shatterSeek_Script.R <SV_file> <CNV_file> <case_id> <results_dir> <graph_dir>")
 }
 sv_file <- args[1]
 cnv_file <- args[2]
-
+case_id <- args[3]
+results_dir <- args[4]
+graph_dir <- args[5]
 
 # ----------------------------
 # 2. SV preprocessing
@@ -30,11 +36,11 @@ sv_df <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# 2.1 define a function to preprocess the info from ALT column
+# 2.1 Define a function to preprocess the info from ALT column
 parseAlt <- function(alt) {
   res <- list(chrom2 = NA, pos2 = NA, strand1 = NA, strand2 = NA)
   
-  # derive strand2 value and content for chr2 and pos2
+  # Derive strand2 value and content for chr2 and pos2
   if (str_detect(alt, "\\[")) {
     res$strand2 <- "-"
     content <- str_match(alt, ".*\\[([^\\[\\]]+)\\[.*")[,2]
@@ -45,7 +51,7 @@ parseAlt <- function(alt) {
     content <- NA
   }
   
-  # derive chr2 and pos2 from content
+  # Derive chr2 and pos2 from content
   if (!is.na(content)) {
     parts <- str_split(content, ":", simplify = TRUE)
     if(ncol(parts) == 2) {
@@ -54,7 +60,7 @@ parseAlt <- function(alt) {
     }
   }
   
-  # get the strand1 value
+  # Get the strand1 value
   if (str_detect(alt, "^[ACGTNacgtn]+")) {
     res$strand1 <- "+"
   } else if (str_detect(alt, "[ACGTNacgtn]+$")) {
@@ -76,7 +82,7 @@ sv_df <- sv_df %>%
   ungroup() %>%
   select(-parsed)
 
-# 2.2 remove the "chr" part to meet the requirement of ShatterSeek
+# 2.2 Remove the "chr" part to meet the requirement of ShatterSeek
 sv_df <- sv_df %>%
   mutate(
     chrom1 = str_replace(chrom1, "^chr", ""),
@@ -92,14 +98,14 @@ sv_df <- sv_df %>%
       TRUE ~ as.numeric(chrom2)
     )
   ) %>%
-  # remove the duplicated entries
+  # Remove the duplicated entries
   mutate(
     keep = ifelse(num_chrom1 == num_chrom2, pos1 < pos2, num_chrom1 < num_chrom2)
   ) %>%
   filter(keep) %>%
   select(-keep, -num_chrom1, -num_chrom2)
 
-# 2.3 add SVtype column
+# 2.3 Add SVtype column
 sv_shatter <- sv_df %>%
   mutate(SVtype = case_when(
     chrom1 != chrom2 ~ "TRA",
@@ -140,22 +146,19 @@ CN_data <- CNVsegs(chrom = as.character(cnv_shatter$chrom),
                    end = cnv_shatter$end,
                    total_cn = cnv_shatter$total_cn)
 
-# 4.2 main function
-# chromothripsis <- shatterseek(SV.sample = SV_data, seg.sample = CN_data, genome = "hg38")
+# 4.2 Main function
 invisible(capture.output(chromothripsis <- shatterseek(SV.sample = SV_data, seg.sample = CN_data, genome = "hg38")))
 
-# 4.3 set the cut-offs
-# maxClusterSize is needed for criteria
+# 4.3 Set the cut-offs
 chromSummary <- chromothripsis@chromSummary
 chromSummary$original_order <- 1:nrow(chromSummary)
 results <- merge(chromSummary, 
-                      chromothripsis@detail$maxClusterSize, 
-                      by = "chrom")
+                 chromothripsis@detail$maxClusterSize, 
+                 by = "chrom")
 results <- results[order(results$original_order), ]
 results$original_order <- NULL
 
-# the cutoffs are recommended values from ShatterSeek
-# the code below provided by ahwanpandey
+# The cutoffs are recommended values from ShatterSeek
 
 # 1st High Confidence filter
 intra_chr_num_6 = results$clusterSize >= 6
@@ -166,7 +169,7 @@ breakpoint_enrich = (results$chr_breakpoint_enrichment <= 0.05) | (results$pval_
 HC_standard = rep("PASS", nrow(results))
 for (i in 1:nrow(results)) {
   failed_criteria = c()
-  if (is.na(intrachr_num_6[i]) || !intrachr_num_6[i]) failed_criteria = c(failed_criteria, "intrachr_num_6")
+  if (is.na(intra_chr_num_6[i]) || !intra_chr_num_6[i]) failed_criteria = c(failed_criteria, "intra_chr_num_6")
   if (is.na(max_num_cn2_num_7[i]) || !max_num_cn2_num_7[i]) failed_criteria = c(failed_criteria, "max_num_cn2_num_7")
   if (is.na(equal_distribution_SVtype[i]) || !equal_distribution_SVtype[i]) failed_criteria = c(failed_criteria, "equal_distribution_SVtype")
   if (is.na(breakpoint_enrich[i]) || !breakpoint_enrich[i]) failed_criteria = c(failed_criteria, "breakpoint_enrich")
@@ -219,7 +222,7 @@ for (i in 1:nrow(results)) {
 }
 results$LC <- LC
 
-# mark the chromothripsis status
+# Mark the chromothripsis status
 results$chromothripsis_status <-
   ifelse(
     (results$HC_standard  == "PASS") |
@@ -230,6 +233,44 @@ results$chromothripsis_status <-
   )
 
 # ----------------------------
-# 5. Final Output
+# 5. Generate plots and prepare final output
 # ----------------------------
+# Add plot_path column to results
+results$plot_path <- NA
+
+# Create a data frame to store the final results
+final_output <- data.frame()
+
+# For each chromosome with clusterSize > 0, generate a plot
+for (i in 1:nrow(results)) {
+  chr <- results$chrom[i]
+  if (!is.na(results$clusterSize[i]) && results$clusterSize[i] > 0) {
+    # Set plot file path
+    plot_file <- file.path(graph_dir, paste0(case_id, "_chr", chr, "_SV_plot.png"))
+    
+    # Generate the plot
+    tryCatch({
+      sv_plot <- plot_sv_arcs(
+        ShatterSeek_output = chromothripsis,
+        chr = chr,
+        save_plot = TRUE,
+        output_file = plot_file,
+        width = 1050,
+        height = 320,
+        res = 300
+      )
+      # Update plot path in results
+      results$plot_path[i] <- paste0(case_id, "_chr", chr, "_SV_plot.png")
+    }, error = function(e) {
+      cat("Error generating plot for chromosome", chr, ":", e$message, "\n")
+    })
+  }
+}
+
+# Combine all rows into the final output
+final_output <- rbind(final_output, results)
+
+# Write results to a file
+output_file <- file.path(results_dir, paste0(case_id, "_shatterSeek_results.tsv"))
+write.table(final_output, output_file, sep = "\t", row.names = FALSE, quote = FALSE)
 
