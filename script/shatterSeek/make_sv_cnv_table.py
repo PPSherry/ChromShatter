@@ -50,7 +50,7 @@ def match_sv_cnv_files(tcga_list_path, sample_sheet_path, output_path):
     print(f"找到 {len(sv_files)} 个SV文件")
     
     # 过滤出CNV文件
-    cnv_files = tcga_df[tcga_df['filename'].str.endswith('.wgs.CaVEMan.raw_somatic_mutation.vcf.gz')]
+    cnv_files = tcga_df[tcga_df['filename'].str.endswith('.wgs.ASCAT.copy_number_variation.seg.txt')]
     print(f"找到 {len(cnv_files)} 个CNV文件")
     
     # 提取file_id
