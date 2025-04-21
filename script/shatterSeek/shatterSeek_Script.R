@@ -270,7 +270,14 @@ for (i in 1:nrow(results)) {
 # Combine all rows into the final output
 final_output <- rbind(final_output, results)
 
+# Clean up any newlines in the data (especially in inter_other_chroms_coords_all column)
+for (col in colnames(final_output)) {
+  if (is.character(final_output[[col]])) {
+    final_output[[col]] <- gsub("\n", ";", final_output[[col]])
+  }
+}
+
 # Write results to a file
 output_file <- file.path(results_dir, paste0(case_id, "_shatterSeek_results.tsv"))
-write.table(final_output, output_file, sep = "\t", row.names = FALSE, quote = FALSE)
+write.table(final_output, output_file, sep = "\t", row.names = FALSE, quote = TRUE)
 
