@@ -127,6 +127,7 @@ cnv_shatter <- cnv %>%
     end = End,
     total_cn = Copy_Number
   ) %>%
+  filter(chrom %in% c(as.character(1:22), "X")) %>%
   select(chrom, start, end, total_cn)
 
 # ----------------------------
@@ -244,7 +245,7 @@ final_output <- data.frame()
 # For each chromosome with clusterSize > 0, generate a plot
 for (i in 1:nrow(results)) {
   chr <- results$chrom[i]
-  if (!is.na(results$clusterSize[i]) && results$clusterSize[i] > 0) {
+  if (!is.na(results$clusterSize[i]) && results$clusterSize[i] > 0 && results$clusterSize_including_TRA[i] > 1) {
     # Set plot file path
     plot_file <- file.path(graph_dir, paste0(case_id, "_chr", chr, "_SV_plot.png"))
     
