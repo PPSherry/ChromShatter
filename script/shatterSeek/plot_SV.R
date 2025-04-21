@@ -40,21 +40,21 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
                                       axis.line.x = element_line(linewidth = 0.5, linetype = "solid", colour = "black"),
                                       axis.line.y = element_line(linewidth = 0.5, linetype = "solid", colour = "black"))  
   
-  # 处理染色体名称
+  # Process chromosome name
   cand = gsub("chr","",chr)
   chr = paste("chr",cand,sep="")
   
-  # 获取染色体上的SV
+  # Get intrachromosomal SVs in the candidate chromosome
   SVsnow <- ShatterSeek_output@detail$SV
   SVsnow <- unique(SVsnow[SVsnow$chrom1 == cand, ])
   
-  # 设置绘图参数
+  # Set plot parameters
   y1=4; y2=12
   df = SVsnow
   df$y1 = rep(y1,nrow(df))
   df$y2 = rep(y2,nrow(df))
   
-  # 确定坐标范围和曲率
+  # Determine coordinate range and curvature
   if (nrow(df)!=0){
     min_coord = min(df$pos1)
     max_coord = max(df$pos2)
@@ -69,12 +69,8 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
     max_coord = 10
   }
   
-  # 初始化SV图
-  d = data.frame(x=c(min_coord),y=c(1),leg=c("DEL","DUP","t2tINV","h2hINV"))
-  
-  SV_plot = ggplot(d,aes(x=x,y=y)) +
-    geom_point(colour="white") + ylim(0,y2+5) + common_ggplot2 +
-    geom_line(data=rbind(d,d),aes(x=x,y=y,colour=leg)) 
+  # 初始化SV图 - 修改以去除可能导致蓝线的部分
+  SV_plot = ggplot() + ylim(0,y2+5) + common_ggplot2
   
   # 处理染色体间SV
   inter <- ShatterSeek_output@detail$SVinter   
@@ -102,14 +98,11 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
     SV_plot = SV_plot + geom_point(data=inter,size=1,alpha=1,aes(x=pos,y=as.numeric(y),colour=SVtype))
   }
   
-  # 添加水平参考线
+  # Add horizontal reference lines
   SV_plot = SV_plot + geom_hline(yintercept=y1,linewidth=0.5) + geom_hline(yintercept=y2,linewidth=0.5) 
   
-  # 处理大数据集
+  # Process large datasets
   if(nrow(df)>300){options(expressions= 100000)}
-  
-  # 创建索引用于图例
-  idx = c()
   
   # 绘制DUP类型SV
   now = df[df$SVtype == "DUP",]
@@ -119,7 +112,6 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
                                     aes(x = pos1, y = y1, xend = pos2, yend = y1), 
                                     curvature = now$curv[i],colour=DUP_color,ncp=8)
     }
-    idx= c(idx,1)
   }
   SV_plot = SV_plot + geom_point(data=now,size=.5,aes(x=pos1,y=y1)) + 
     geom_point(data=now,size=.5,aes(x=pos2,y=y1))
@@ -132,7 +124,6 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
                                     aes(x = pos1, y = y1, xend = pos2, yend = y1), 
                                     curvature = -1*now$curv[i],colour=DEL_color) 
     }
-    idx= c(idx,2)
   }
   SV_plot = SV_plot + geom_point(data=now,size=.5,aes(x=pos1,y=y1)) + 
     geom_point(data=now,size=.5,aes(x=pos2,y=y1))
@@ -145,7 +136,6 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
                                     aes(x = pos1, y = y2, xend = pos2, yend = y2), 
                                     curvature = now$curv[i],colour=t2tINV_color) 
     }
-    idx= c(idx,3)
   }
   SV_plot = SV_plot + geom_point(data=now,size=.5,aes(x=pos1,y=y2)) + 
     geom_point(data=now,size=.5,aes(x=pos2,y=y2))
@@ -158,7 +148,6 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
                                     aes(x = pos1, y = y2, xend = pos2, yend = y2), 
                                     curvature = -1*now$curv[i],colour=h2hINV_color) 
     }
-    idx= c(idx,4)
   }
   SV_plot = SV_plot + geom_point(data=now,size=.5,aes(x=pos1,y=y2)) + 
     geom_point(data=now,size=.5,aes(x=pos2,y=y2))
@@ -169,22 +158,18 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
                            axis.title.y=element_blank(),
                            axis.text.y=element_blank(),
                            axis.ticks.y=element_blank(),
-                           # 隐藏X轴文本和标记
                            axis.text.x=element_blank(),
-                           # 确保Y轴完全不可见
                            axis.line.y=element_blank()) + 
     scale_x_continuous(expand = c(0.01,0.01)) + 
     coord_cartesian(xlim=c(min_coord,max_coord))
   
-  # 添加颜色图例
-  idx = c(1,2,3,4)
-  vals = c(DEL_color=DEL_color,DUP_color=DUP_color,
-           t2tINV_color=t2tINV_color,h2hINV_color=h2hINV_color)
-  labs = c('DEL','DUP',"t2tINV","h2hINV")
+  # 添加颜色图例 - 简化图例设置
+  vals = c(DEL_color, DUP_color, t2tINV_color, h2hINV_color)
+  labs = c('DEL', 'DUP', "t2tINV", "h2hINV")
   
   SV_plot = SV_plot + scale_colour_manual(name = 'SV type', 
-                                        values = c(DEL_color,DUP_color,t2tINV_color,h2hINV_color),
-                                        labels = labs[idx]) + theme(legend.position="none")
+                                        values = vals,
+                                        labels = labs) + theme(legend.position="none")
   
   # 保存图像
   if(save_plot) {
