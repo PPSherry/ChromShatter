@@ -1,5 +1,5 @@
 #' Plot structural variation arcs
-#' 
+#'
 #' @param ShatterSeek_output the output of the function shatterseek
 #' @param chr chromosome for which the plot will be generated
 #' @param DEL_color colour to show the deletion-like SVs
@@ -13,32 +13,32 @@
 #' @param height height of the output plot
 #' @param res resolution of the output plot
 #' @return a ggplot object showing the SV arcs
-#' 
+#'
 #' @export
 plot_sv_arcs <- function(ShatterSeek_output, chr,
-                        DEL_color='darkorange1', DUP_color='blue1',
-                        t2tINV_color="forestgreen", h2hINV_color="black",
-                        arc_size=0.2,
-                        save_plot=FALSE,
-                        output_file="SV_plot.png",
-                        width=1050, height=320, res=300) {
+                         DEL_color='darkorange1', DUP_color='blue1',
+                         t2tINV_color="forestgreen", h2hINV_color="black",
+                         arc_size=0.2,
+                         save_plot=FALSE,
+                         output_file="SV_plot.png",
+                         width=1050, height=320, res=300) {
   
   # 通用ggplot2主题设置
   common_ggplot2 <- theme_bw() + theme(axis.text.x=element_text(size=7,angle=0),
-                                      axis.text.y=element_text(size=7),
-                                      axis.title.y=element_text(size=7),
-                                      axis.title.x=element_blank(),
-                                      legend.position="none",
-                                      legend.text = element_text(size=7),
-                                      legend.key = element_blank(),
-                                      plot.margin=unit(c(0.1,0.1,0,0.1),"cm"),
-                                      plot.title=element_blank(),
-                                      panel.grid.major = element_blank(),
-                                      panel.grid.minor = element_blank(), 
-                                      legend.title=element_blank(),
-                                      plot.background = element_blank(),
-                                      axis.line.x = element_line(linewidth = 0.5, linetype = "solid", colour = "black"),
-                                      axis.line.y = element_line(linewidth = 0.5, linetype = "solid", colour = "black"))  
+                                       axis.text.y=element_text(size=7),
+                                       axis.title.y=element_text(size=7),
+                                       axis.title.x=element_blank(),
+                                       legend.position="none",
+                                       legend.text = element_text(size=7),
+                                       legend.key = element_blank(),
+                                       plot.margin=unit(c(0.1,0.1,0,0.1),"cm"),
+                                       plot.title=element_blank(),
+                                       panel.grid.major = element_blank(),
+                                       panel.grid.minor = element_blank(), 
+                                       legend.title=element_blank(),
+                                       plot.background = element_blank(),
+                                       axis.line.x = element_line(linewidth = 0.5, linetype = "solid", colour = "black"),
+                                       axis.line.y = element_line(linewidth = 0.5, linetype = "solid", colour = "black"))  
   
   # Process chromosome name
   cand = gsub("chr","",chr)
@@ -69,7 +69,7 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
     max_coord = 10
   }
   
-  # 初始化SV图 - 修改以去除可能导致蓝线的部分
+  # 初始化SV图
   SV_plot = ggplot() + ylim(0,y2+5) + common_ggplot2
   
   # 处理染色体间SV
@@ -78,15 +78,15 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   
   if (nrow(inter)>0){
     inter$SVtype = factor(inter$SVtype,levels=c("DEL","DUP","h2hINV","t2tINV"))
-    inter$y = rep(0,nrow(inter))
-    inter$y[which(inter$SVtype %in% c("DUP","DEL"))] = 4
-    inter$y[!(inter$SVtype %in% c("DUP","DEL"))] = 12
     inter$type_SV = rep("",nrow(inter))
     inter$type_SV[which(inter$strand1 == "-" & inter$strand2 == "-")] = "t2tINV"
     inter$type_SV[which(inter$strand1 == "-" & inter$strand2 == "+")] = "DUP"
     inter$type_SV[which(inter$strand1 == "+" & inter$strand2 == "-")] = "DEL"
     inter$type_SV[which(inter$strand1 == "+" & inter$strand2 == "+")] = "h2hINV"
     inter$SVtype = inter$type_SV; inter$type_SV=NULL
+    inter$y = rep(0,nrow(inter))
+    inter$y[which(inter$SVtype %in% c("DUP","DEL"))] = 4
+    inter$y[!(inter$SVtype %in% c("DUP","DEL"))] = 12
     inter$colour = rep("",nrow(inter))
     inter$colour[which(inter$SVtype == "DUP")] = DUP_color
     inter$colour[which(inter$SVtype == "DEL")] = DEL_color
@@ -98,8 +98,10 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
     SV_plot = SV_plot + geom_point(data=inter,size=1,alpha=1,aes(x=pos,y=as.numeric(y),colour=SVtype))
   }
   
-  # Add horizontal reference lines
-  SV_plot = SV_plot + geom_hline(yintercept=y1,linewidth=0.5) + geom_hline(yintercept=y2,linewidth=0.5) 
+  # Add horizontal reference lines with explicit color
+  SV_plot = SV_plot + 
+    geom_hline(yintercept=y1, linewidth=0.5, colour="black") +  # 明确指定颜色
+    geom_hline(yintercept=y2, linewidth=0.5, colour="black")    # 明确指定颜色
   
   # Process large datasets
   if(nrow(df)>300){options(expressions= 100000)}
@@ -109,8 +111,8 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   if (nrow(now) > 0){
     for (i in 1:nrow(now)){
       SV_plot = SV_plot + geom_curve(linewidth=arc_size,data = now[i,], 
-                                    aes(x = pos1, y = y1, xend = pos2, yend = y1), 
-                                    curvature = now$curv[i],colour=DUP_color,ncp=8)
+                                     aes(x = pos1, y = y1, xend = pos2, yend = y1), 
+                                     curvature = now$curv[i],colour=DUP_color,ncp=8)
     }
   }
   SV_plot = SV_plot + geom_point(data=now,size=.5,aes(x=pos1,y=y1)) + 
@@ -121,8 +123,8 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   if (nrow(now) > 0){
     for (i in 1:nrow(now)){
       SV_plot = SV_plot + geom_curve(linewidth=arc_size,data = now[i,], 
-                                    aes(x = pos1, y = y1, xend = pos2, yend = y1), 
-                                    curvature = -1*now$curv[i],colour=DEL_color) 
+                                     aes(x = pos1, y = y1, xend = pos2, yend = y1), 
+                                     curvature = -1*now$curv[i],colour=DEL_color) 
     }
   }
   SV_plot = SV_plot + geom_point(data=now,size=.5,aes(x=pos1,y=y1)) + 
@@ -133,8 +135,8 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   if (nrow(now) > 0){
     for (i in 1:nrow(now)){
       SV_plot = SV_plot + geom_curve(linewidth=arc_size,data = now[i,], 
-                                    aes(x = pos1, y = y2, xend = pos2, yend = y2), 
-                                    curvature = now$curv[i],colour=t2tINV_color) 
+                                     aes(x = pos1, y = y2, xend = pos2, yend = y2), 
+                                     curvature = now$curv[i],colour=t2tINV_color) 
     }
   }
   SV_plot = SV_plot + geom_point(data=now,size=.5,aes(x=pos1,y=y2)) + 
@@ -145,8 +147,8 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   if (nrow(now) > 0){
     for (i in 1:nrow(now)){
       SV_plot = SV_plot + geom_curve(linewidth=arc_size,data = now[i,], 
-                                    aes(x = pos1, y = y2, xend = pos2, yend = y2), 
-                                    curvature = -1*now$curv[i],colour=h2hINV_color) 
+                                     aes(x = pos1, y = y2, xend = pos2, yend = y2), 
+                                     curvature = -1*now$curv[i],colour=h2hINV_color) 
     }
   }
   SV_plot = SV_plot + geom_point(data=now,size=.5,aes(x=pos1,y=y2)) + 
@@ -154,26 +156,24 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   
   # 修改主题设置，移除坐标轴线和底部边框
   SV_plot = SV_plot + theme(axis.ticks.x=element_blank(),
-                           panel.border = element_blank(),
-                           axis.title.y=element_blank(),
-                           axis.text.y=element_blank(),
-                           axis.ticks.y=element_blank(),
-                           axis.text.x=element_blank(),
-                           axis.line.y=element_blank(),
-                           # 移除x轴线以消除y=0处的黑线
-                           axis.line.x=element_blank(),
-                           # 确保底部区域无边框
-                           panel.background = element_rect(fill = "white", colour = NA)) + 
+                            panel.border = element_blank(),
+                            axis.title.y=element_blank(),
+                            axis.text.y=element_blank(),
+                            axis.ticks.y=element_blank(),
+                            axis.text.x=element_blank(),
+                            axis.line.y=element_blank(),
+                            axis.line.x=element_blank(),
+                            panel.background = element_rect(fill = "white", colour = NA)) + 
     scale_x_continuous(expand = c(0.01,0.01)) + 
     coord_cartesian(xlim=c(min_coord,max_coord))
   
-  # 添加颜色图例 - 简化图例设置
+  # 添加颜色图例
   vals = c(DEL_color, DUP_color, t2tINV_color, h2hINV_color)
   labs = c('DEL', 'DUP', "t2tINV", "h2hINV")
   
   SV_plot = SV_plot + scale_colour_manual(name = 'SV type', 
-                                        values = vals,
-                                        labels = labs) + theme(legend.position="none")
+                                          values = vals,
+                                          labels = labs) + theme(legend.position="none")
   
   # 保存图像
   if(save_plot) {
