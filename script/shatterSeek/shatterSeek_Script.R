@@ -279,5 +279,5 @@ for (col in colnames(final_output)) {
 
 # Write results to a file
 output_file <- file.path(results_dir, paste0(case_id, "_shatterSeek_results.tsv"))
-write.table(final_output, output_file, sep = "\t", row.names = FALSE, quote = TRUE)
+write.table(final_output, output_file, sep = "\t", row.names = FALSE, quote = FALSE)
 

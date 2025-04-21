@@ -152,14 +152,18 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
   SV_plot = SV_plot + geom_point(data=now,size=.5,aes(x=pos1,y=y2)) + 
     geom_point(data=now,size=.5,aes(x=pos2,y=y2))
   
-  # 应用主题和坐标设置
+  # 修改主题设置，移除坐标轴线和底部边框
   SV_plot = SV_plot + theme(axis.ticks.x=element_blank(),
                            panel.border = element_blank(),
                            axis.title.y=element_blank(),
                            axis.text.y=element_blank(),
                            axis.ticks.y=element_blank(),
                            axis.text.x=element_blank(),
-                           axis.line.y=element_blank()) + 
+                           axis.line.y=element_blank(),
+                           # 移除x轴线以消除y=0处的黑线
+                           axis.line.x=element_blank(),
+                           # 确保底部区域无边框
+                           panel.background = element_rect(fill = "white", colour = NA)) + 
     scale_x_continuous(expand = c(0.01,0.01)) + 
     coord_cartesian(xlim=c(min_coord,max_coord))
   
