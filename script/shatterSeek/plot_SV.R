@@ -93,9 +93,9 @@ plot_sv_arcs <- function(ShatterSeek_output, chr,
     inter$colour[which(inter$SVtype == "h2hINV")] = h2hINV_color
     inter$colour[which(inter$SVtype == "t2tINV")] = t2tINV_color
     
-    inter = data.frame(chr = c(inter$chrom1,inter$chrom2), pos = c(inter$pos1,inter$pos2), y=c(inter$y,inter$y), SVtype=c(inter$SVtype,inter$SVtype))
-    inter = inter[inter$chr == cand, c(2:4)]
-    SV_plot = SV_plot + geom_point(data=inter,size=1,alpha=1,aes(x=pos,y=as.numeric(y),colour=SVtype))
+    inter = data.frame(chr = c(inter$chrom1,inter$chrom2), pos = c(inter$pos1,inter$pos2), y=c(inter$y,inter$y), SVtype=c(inter$SVtype,inter$SVtype), colour=c(inter$colour,inter$colour))
+    inter = inter[inter$chr == cand, c(2:5)]
+    SV_plot = SV_plot + geom_point(data=inter,size=1,alpha=1,aes(x=pos,y=as.numeric(y)),colour=inter$colour)
   }
   
   # Add horizontal reference lines with explicit color
