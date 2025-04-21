@@ -83,7 +83,7 @@ fi
             
             # Append sample results with case_id prepended to each row
             # Use -F to specify tab as field separator and handle quotes properly
-            awk -F'\t' -v FPAT='([^"\t]+)|("[^"]*")' -v OFS='\t' -v cid="$case_id" 'NR>1 {print cid,$0}' "$sample_results" >> "$OUTPUT_FILE"
+            awk -F'\t' -v OFS='\t' -v cid="$case_id" 'NR>1 {print cid,$0}' "$sample_results" >> "$OUTPUT_FILE"
             echo "Results for $case_id added to $OUTPUT_FILE"
             echo "$case_id,$status,$(date +"%Y-%m-%d %H:%M:%S")" >> "$LOG_FILE"
         else
