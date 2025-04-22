@@ -8,3 +8,4 @@ SV_graph.simulated/TCGA_single_sample/
 .DS_Store
 tmp.*
 *.zip
+R_log.txt
