@@ -1,9 +1,10 @@
-SV_graph.high-confidence/
+SV_graph.PCAWG/
 pdf_convert/
 region_images/
 __pycache__/
 SV_graph.simulated/TCGA_graph/
 SV_graph.simulated/TCGA_single_sample/
+test/
 
 .DS_Store
 tmp.*

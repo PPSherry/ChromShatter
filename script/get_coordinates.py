@@ -1,3 +1,6 @@
+# 将PCAWG的PDF中的每一页转换成图片后，使用此脚本获取每一页中SV断点图的坐标
+# 基于的假设：每一页的SV断点图的坐标是相同的
+
 import cv2
 
 def get_coordinates(image_path):
