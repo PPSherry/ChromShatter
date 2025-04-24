@@ -18,7 +18,7 @@
 plot_sv_arcs <- function(ShatterSeek_output, chr,
                          DEL_color='darkorange1', DUP_color='blue1',
                          t2tINV_color="forestgreen", h2hINV_color="black",
-                         arc_size=0.2,
+                         arc_size=0.3,
                          save_plot=FALSE,
                          output_file="SV_plot.png",
                          width=1050, height=320, res=300) {
