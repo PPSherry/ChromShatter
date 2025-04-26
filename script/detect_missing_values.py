@@ -52,16 +52,16 @@ def detect_missing_values(input_file, output_file, cleaned_output_file=None, rem
 
 def main():
     # 设置输入输出文件路径
-    input_file = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset4_info/combined_events.tsv"
-    output_file = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset4_info/combined_events_missing_values.tsv"
+    input_file = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset3_info/combined_events.tsv"
+    output_file = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset3_info/combined_events_missing_values.tsv"
     
     # 设置是否移除缺失值
-    remove_missing_values = False
+    remove_missing_values = True
     
     # 如果需要移除缺失值，设置清洗后的输出文件路径
     cleaned_output_file = None
     if remove_missing_values:
-        cleaned_output_file = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset4_info/combined_events_remove_missing_values.tsv"
+        cleaned_output_file = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset3_info/combined_events_remove_missing_values.tsv"
     
     # 检查输入文件是否存在
     if not os.path.exists(input_file):
