@@ -95,7 +95,7 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments	i
 24	2	Upper_Right	9f6be944-83de-42ab-8738-f0022f475e61	3:9745722−194626444	12, 14	60.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_24_part_2.png
 24	3	Lower_Left	9f6be944-83de-42ab-8738-f0022f475e61	5:10244050−179437055	11, 11	28.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_24_part_3.png
 24	4	Lower_Right	9f6be944-83de-42ab-8738-f0022f475e61	7:27995787−139646245	15, 16	31.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_24_part_4.png
-25	1	Upper_Left	9f6be944-83de-42ab-8738-f0022f475e61	1:2210884−224017647	7, 10	61.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_25_part_1.png
+25	1	Upper_Left	9f6be944-83de-42ab-8738-f0022f475e61	8:6488297−144963441	7, 10	61.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_25_part_1.png
 25	2	Upper_Right	9f6be944-83de-42ab-8738-f0022f475e61	X:64211866−154270745	14, 23	28.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_25_part_2.png
 25	3	Lower_Left	9fefbe7c-f66a-4940-843e-285cb7b392c1	5:74688832−80707030	6, 11	25.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_25_part_3.png
 25	4	Lower_Right	9fefbe7c-f66a-4940-843e-285cb7b392c1	9:21844042−112515969	5, 10	16.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_25_part_4.png
@@ -104,7 +104,7 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments	i
 26	3	Lower_Left	a824b3bd-34d5-4cc1-a92f-f9d6ac0f1814	6:134899220−141764105	7, 17	17.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_26_part_3.png
 26	4	Lower_Right	a824b3bd-34d5-4cc1-a92f-f9d6ac0f1814	7:123121252−157394758	5, 9	9.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_26_part_4.png
 27	1	Upper_Left	a824b3bd-34d5-4cc1-a92f-f9d6ac0f1814	19:13207846−29674953	7, 7	12.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_27_part_1.png
-27	2	Upper_Right	b094e8b2-8ece-4b36-8025-18073a8b873c	10:84390295−134360314	11, 11	54.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_27_part_2.png
+27	2	Upper_Right	b094e8b2-8ece-4b36-8025-18073a8b873c	1:3498809−247725333	11, 11	54.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_27_part_2.png
 27	3	Lower_Left	b094e8b2-8ece-4b36-8025-18073a8b873c	3:4164393−197488086	7, 17	47.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_27_part_3.png
 27	4	Lower_Right	b094e8b2-8ece-4b36-8025-18073a8b873c	6:107054725−113512450	4, 4	32.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_27_part_4.png
 28	1	Upper_Left	b094e8b2-8ece-4b36-8025-18073a8b873c	7:31636190−151854819	7, 11	28.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_28_part_1.png
@@ -247,7 +247,7 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments	i
 62	2	Upper_Right	RK053	3:60740057−188119821	10, 10	10.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_62_part_2.png
 62	3	Lower_Left	RK070	11:2547255−132275890	7, 19	19.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_62_part_3.png
 62	4	Lower_Right	RK107	1:26503377−220160009	9, 21	66.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_62_part_4.png
-63	1	Upper_Left	RK107	11:65126119−117045448	9, 9	50.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_63_part_1.png
+63	1	Upper_Left	RK107	2:2119500−211577974	9, 9	50.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_63_part_1.png
 63	2	Upper_Right	RK107	3:39802700−133489711	9, 22	40.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_63_part_2.png
 63	3	Lower_Left	RK107	4:40323309−109722573	9, 10	13.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_63_part_3.png
 63	4	Lower_Right	RK107	10:75643021−104011740	11, 13	21.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_63_part_4.png
@@ -336,7 +336,7 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments	i
 84	3	Lower_Left	AOCS-117	11:6511167−122670130	9, 16	19.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_84_part_3.png
 84	4	Lower_Right	AOCS-119	X:73888460−94161009	8, 8	12.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_84_part_4.png
 85	1	Upper_Left	AOCS-120	1:1708031−206256543	12, 21	61.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_85_part_1.png
-85	2	Upper_Right	AOCS-120	1:1708031−206256542	11, 13	86.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_85_part_2.png
+85	2	Upper_Right	AOCS-120	2:17888044−240960571	11, 13	86.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_85_part_2.png
 85	3	Lower_Left	AOCS-128	2:19515679−227555412	9, 15	40.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_85_part_3.png
 85	4	Lower_Right	AOCS-128	20:11284294−25291268	8, 9	9.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_85_part_4.png
 86	1	Upper_Left	AOCS-138	5:96175581−171118223	10, 10	10.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_86_part_1.png
@@ -480,11 +480,11 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments	i
 120	3	Lower_Left	A10-0015_CRUK_PC_0015	15:41980634−78763235	7, 10	10.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_120_part_3.png
 120	4	Lower_Right	A10-0015_CRUK_PC_0015	18:274859−74026630	10, 10	10.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_120_part_4.png
 121	1	Upper_Left	A10-0015_CRUK_PC_0015	X:23125163−133708183	12, 20	33.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_121_part_1.png
-121	2	Upper_Right	A17-0095_CRUK_PC_0095	10:1424131−123537842	16, 46	56.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_121_part_2.png
+121	2	Upper_Right	A17-0095_CRUK_PC_0095	2:29177870−206548845	16, 46	56.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_121_part_2.png
 121	3	Lower_Left	A17-0095_CRUK_PC_0095	3:18799507−143335634	21, 30	30.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_121_part_3.png
 121	4	Lower_Right	A17-0095_CRUK_PC_0095	4:679859−171367419	16, 32	32.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_121_part_4.png
 122	1	Upper_Left	A17-0095_CRUK_PC_0095	6:17635126−170579356	10, 34	34.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_122_part_1.png
-122	2	Upper_Right	A17-0095_CRUK_PC_0095	16:1802279−88025685	22, 22	58.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_122_part_2.png
+122	2	Upper_Right	A17-0095_CRUK_PC_0095	7:740003−154793672	22, 22	58.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_122_part_2.png
 122	3	Lower_Left	A17-0095_CRUK_PC_0095	10:1424131−123537843	17, 37	37.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_122_part_3.png
 122	4	Lower_Right	A17-0095_CRUK_PC_0095	11:22270950−133333955	16, 19	47.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_122_part_4.png
 123	1	Upper_Left	A17-0095_CRUK_PC_0095	12:10913800−112566167	10, 28	42.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_123_part_1.png
@@ -560,7 +560,7 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments	i
 140	3	Lower_Left	5b7e557a-6aee-4077-b3cd-c96179e643ae	14:21910299−106251175	9, 21	21.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_140_part_3.png
 140	4	Lower_Right	5b7e557a-6aee-4077-b3cd-c96179e643ae	17:9703698−79150095	8, 19	27.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_140_part_4.png
 141	1	Upper_Left	5b7e557a-6aee-4077-b3cd-c96179e643ae	19:1335997−58908317	7, 12	15.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_141_part_1.png
-141	2	Upper_Right	5b7e557a-6aee-4077-b3cd-c96179e643ae	1:43676646−240124426	10, 11	27.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_141_part_2.png
+141	2	Upper_Right	5b7e557a-6aee-4077-b3cd-c96179e643ae	20:30101824−57105676	10, 11	27.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_141_part_2.png
 141	3	Lower_Left	5b7e557a-6aee-4077-b3cd-c96179e643ae	21:15908074−46609729	8, 8	8.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_141_part_3.png
 141	4	Lower_Right	60879669-96c2-4710-82e0-0ae9d0e5b242	10:5810804−124150825	11, 18	24.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_141_part_4.png
 142	1	Upper_Left	60879669-96c2-4710-82e0-0ae9d0e5b242	11:2015155−118632987	15, 23	35.0	/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset3/page_142_part_1.png
