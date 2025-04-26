@@ -48,28 +48,32 @@ def get_fixed_quadrant_coordinates():
             'min_x': 50.0,  # 略小于最小的left_x以确保覆盖
             'max_x': 290.0, # 略大于最大的right_x
             'min_y': 265.0, # 略小于最小的top_y
-            'max_y': 420.0  # 略大于最大的bottom_y
+            # 'max_y': 420.0  # 略大于最大的bottom_y
+            'max_y': 410.0
         },
         # 右上区域
         {
             'min_x': 315.0,
             'max_x': 565.0,
             'min_y': 265.0,
-            'max_y': 420.0
+            # 'max_y': 420.0
+            'max_y': 410.0
         },
         # 左下区域
         {
             'min_x': 45.0,
             'max_x': 290.0,
             'min_y': 670.0,
-            'max_y': 835.0
+            # 'max_y': 835.0
+            'max_y': 850.0
         },
         # 右下区域
         {
             'min_x': 315.0,
             'max_x': 565.0,
             'min_y': 670.0,
-            'max_y': 835.0
+            # 'max_y': 835.0
+            'max_y': 850.0
         }
     ]
     return quadrants
@@ -339,15 +343,16 @@ def combine_text_and_image_info(text_tsv, image_tsv, output_tsv):
 
 def main():
     # 设置路径
-    pdf_path = "/Users/xurui/back_up_unit/天津大学文件/本科毕设相关/Article/high-confidence.pdf"
-    image_dir = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/test-picture"
+    pdf_path = "/Users/xurui/back_up_unit/天津大学文件/本科毕设相关/Article/ShatterSeek_data/NG_Supplementary_db_4.pdf"
+    image_dir = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset4"
     donor_ref_file = "/Users/xurui/back_up_unit/天津大学文件/本科毕设相关/Article/PCAWG-SupplementTable1.xlsx"
 
     # output path
-    text_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/text_info_from_PDF/extracted_events.tsv"
-    image_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/text_info_from_PDF/image_records.tsv"
-    combined_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/text_info_from_PDF/combined_events.tsv"
+    text_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset4_info/extracted_events.tsv"
+    image_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset4_info/image_records.tsv"
+    combined_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset4_info/combined_events.tsv"
 
+    # 注意还需要在 get_fixed_quadrant_coordinates() 中设置正确的坐标范围
     
     # 确认路径
     print(f"PDF路径: {pdf_path}")
