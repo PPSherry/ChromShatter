@@ -64,16 +64,16 @@ def get_fixed_quadrant_coordinates():
             'min_x': 45.0,
             'max_x': 290.0,
             'min_y': 670.0,
-            # 'max_y': 835.0
-            'max_y': 850.0
+            'max_y': 835.0
+            # 'max_y': 850.0
         },
         # 右下区域
         {
             'min_x': 315.0,
             'max_x': 565.0,
             'min_y': 670.0,
-            # 'max_y': 835.0
-            'max_y': 850.0
+            'max_y': 835.0
+            # 'max_y': 850.0
         }
     ]
     return quadrants
@@ -135,16 +135,20 @@ def extract_event_info(event_text, donor_ids=None):
     oscillating_cn_value_block = None
     
     # 第一步：提取位置信息
-    for line in lines:
-        line_text = " ".join(item["text"] for item in line)
-        if "Position" in line_text:
-            position_parts = line_text.split("Position")
-            if len(position_parts) > 1:
-                position_text = position_parts[1].strip()
-                # 提取染色体位置格式，如 "1:120690998−248630158"
-                position_match = re.search(r'([0-9XY]+:\d+[−-]\d+)', position_text)
-                if position_match:
-                    info["position"] = position_match.group(1)
+    position_matches = []
+    for item in event_text:
+        position_match = re.search(r'([0-9XY]+:\d+[−-]\d+)', item["text"])
+        if position_match:
+            position_matches.append({
+                "position": position_match.group(1),
+                "y0": item["y0"]
+            })
+    
+    # 如果有匹配结果，选择y坐标最小的作为position值
+    if position_matches:
+        # 按y0坐标排序并取第一个（最上方的）
+        position_matches.sort(key=lambda x: x["y0"])
+        info["position"] = position_matches[0]["position"]
     
     # 第二步：提取震荡CN值
     for i, line in enumerate(lines):
@@ -343,14 +347,14 @@ def combine_text_and_image_info(text_tsv, image_tsv, output_tsv):
 
 def main():
     # 设置路径
-    pdf_path = "/Users/xurui/back_up_unit/天津大学文件/本科毕设相关/Article/ShatterSeek_data/NG_Supplementary_db_4.pdf"
-    image_dir = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.dataset4"
+    pdf_path = "/Users/xurui/back_up_unit/天津大学文件/本科毕设相关/Article/ShatterSeek_data/low-confidence.pdf"
+    image_dir = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/SV_graph.low_confidence"
     donor_ref_file = "/Users/xurui/back_up_unit/天津大学文件/本科毕设相关/Article/PCAWG-SupplementTable1.xlsx"
 
     # output path
-    text_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset4_info/extracted_events.tsv"
-    image_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset4_info/image_records.tsv"
-    combined_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/dataset4_info/combined_events.tsv"
+    text_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/low_confidence_info/extracted_events.tsv"
+    image_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/low_confidence_info/image_records.tsv"
+    combined_output = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model/SV_graph.PCAWG/CNV_info_from_PDF/low_confidence_info/combined_events.tsv"
 
     # 注意还需要在 get_fixed_quadrant_coordinates() 中设置正确的坐标范围
     
