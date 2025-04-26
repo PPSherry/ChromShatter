@@ -95,7 +95,7 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments
 24	2	Upper_Right	9f6be944-83de-42ab-8738-f0022f475e61	3:9745722−194626444	12, 14	60
 24	3	Lower_Left	9f6be944-83de-42ab-8738-f0022f475e61	5:10244050−179437055	11, 11	28
 24	4	Lower_Right	9f6be944-83de-42ab-8738-f0022f475e61	7:27995787−139646245	15, 16	31
-25	1	Upper_Left	9f6be944-83de-42ab-8738-f0022f475e61	1:2210884−224017647	7, 10	61
+25	1	Upper_Left	9f6be944-83de-42ab-8738-f0022f475e61	8:6488297−144963441	7, 10	61
 25	2	Upper_Right	9f6be944-83de-42ab-8738-f0022f475e61	X:64211866−154270745	14, 23	28
 25	3	Lower_Left	9fefbe7c-f66a-4940-843e-285cb7b392c1	5:74688832−80707030	6, 11	25
 25	4	Lower_Right	9fefbe7c-f66a-4940-843e-285cb7b392c1	9:21844042−112515969	5, 10	16
@@ -104,7 +104,7 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments
 26	3	Lower_Left	a824b3bd-34d5-4cc1-a92f-f9d6ac0f1814	6:134899220−141764105	7, 17	17
 26	4	Lower_Right	a824b3bd-34d5-4cc1-a92f-f9d6ac0f1814	7:123121252−157394758	5, 9	9
 27	1	Upper_Left	a824b3bd-34d5-4cc1-a92f-f9d6ac0f1814	19:13207846−29674953	7, 7	12
-27	2	Upper_Right	b094e8b2-8ece-4b36-8025-18073a8b873c	10:84390295−134360314	11, 11	54
+27	2	Upper_Right	b094e8b2-8ece-4b36-8025-18073a8b873c	1:3498809−247725333	11, 11	54
 27	3	Lower_Left	b094e8b2-8ece-4b36-8025-18073a8b873c	3:4164393−197488086	7, 17	47
 27	4	Lower_Right	b094e8b2-8ece-4b36-8025-18073a8b873c	6:107054725−113512450	4, 4	32
 28	1	Upper_Left	b094e8b2-8ece-4b36-8025-18073a8b873c	7:31636190−151854819	7, 11	28
@@ -247,7 +247,7 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments
 62	2	Upper_Right	RK053	3:60740057−188119821	10, 10	10
 62	3	Lower_Left	RK070	11:2547255−132275890	7, 19	19
 62	4	Lower_Right	RK107	1:26503377−220160009	9, 21	66
-63	1	Upper_Left	RK107	11:65126119−117045448	9, 9	50
+63	1	Upper_Left	RK107	2:2119500−211577974	9, 9	50
 63	2	Upper_Right	RK107	3:39802700−133489711	9, 22	40
 63	3	Lower_Left	RK107	4:40323309−109722573	9, 10	13
 63	4	Lower_Right	RK107	10:75643021−104011740	11, 13	21
@@ -336,7 +336,7 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments
 84	3	Lower_Left	AOCS-117	11:6511167−122670130	9, 16	19
 84	4	Lower_Right	AOCS-119	X:73888460−94161009	8, 8	12
 85	1	Upper_Left	AOCS-120	1:1708031−206256543	12, 21	61
-85	2	Upper_Right	AOCS-120	1:1708031−206256542	11, 13	86
+85	2	Upper_Right	AOCS-120	2:17888044−240960571	11, 13	86
 85	3	Lower_Left	AOCS-128	2:19515679−227555412	9, 15	40
 85	4	Lower_Right	AOCS-128	20:11284294−25291268	8, 9	9
 86	1	Upper_Left	AOCS-138	5:96175581−171118223	10, 10	10
@@ -480,11 +480,11 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments
 120	3	Lower_Left	A10-0015_CRUK_PC_0015	15:41980634−78763235	7, 10	10
 120	4	Lower_Right	A10-0015_CRUK_PC_0015	18:274859−74026630	10, 10	10
 121	1	Upper_Left	A10-0015_CRUK_PC_0015	X:23125163−133708183	12, 20	33
-121	2	Upper_Right	A17-0095_CRUK_PC_0095	10:1424131−123537842	16, 46	56
+121	2	Upper_Right	A17-0095_CRUK_PC_0095	2:29177870−206548845	16, 46	56
 121	3	Lower_Left	A17-0095_CRUK_PC_0095	3:18799507−143335634	21, 30	30
 121	4	Lower_Right	A17-0095_CRUK_PC_0095	4:679859−171367419	16, 32	32
 122	1	Upper_Left	A17-0095_CRUK_PC_0095	6:17635126−170579356	10, 34	34
-122	2	Upper_Right	A17-0095_CRUK_PC_0095	16:1802279−88025685	22, 22	58
+122	2	Upper_Right	A17-0095_CRUK_PC_0095	7:740003−154793672	22, 22	58
 122	3	Lower_Left	A17-0095_CRUK_PC_0095	10:1424131−123537843	17, 37	37
 122	4	Lower_Right	A17-0095_CRUK_PC_0095	11:22270950−133333955	16, 19	47
 123	1	Upper_Left	A17-0095_CRUK_PC_0095	12:10913800−112566167	10, 28	42
@@ -560,7 +560,7 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments
 140	3	Lower_Left	5b7e557a-6aee-4077-b3cd-c96179e643ae	14:21910299−106251175	9, 21	21
 140	4	Lower_Right	5b7e557a-6aee-4077-b3cd-c96179e643ae	17:9703698−79150095	8, 19	27
 141	1	Upper_Left	5b7e557a-6aee-4077-b3cd-c96179e643ae	19:1335997−58908317	7, 12	15
-141	2	Upper_Right	5b7e557a-6aee-4077-b3cd-c96179e643ae	1:43676646−240124426	10, 11	27
+141	2	Upper_Right	5b7e557a-6aee-4077-b3cd-c96179e643ae	20:30101824−57105676	10, 11	27
 141	3	Lower_Left	5b7e557a-6aee-4077-b3cd-c96179e643ae	21:15908074−46609729	8, 8	8
 141	4	Lower_Right	60879669-96c2-4710-82e0-0ae9d0e5b242	10:5810804−124150825	11, 18	24
 142	1	Upper_Left	60879669-96c2-4710-82e0-0ae9d0e5b242	11:2015155−118632987	15, 23	35
@@ -601,217 +601,217 @@ page	event	quadrant	sample_name	position	oscillating_cn_2&3_states	cn_segments
 150	4	Lower_Right	af37d8f0-fea0-47f6-be0a-2fb55a5da5c4	12:24679746−80152939	12, 14	14
 151	1	Upper_Left	BTCA_donor_A035		77, 2	
 151	2	Upper_Right	BTCA_donor_A035		77, 2	
-151	3	Lower_Left	RK159		7, 2	
-151	4	Lower_Right	RK310		8, 1	
+151	3	Lower_Left	RK159		84, 3	
+151	4	Lower_Right	RK310		68, 1	
 152	1	Upper_Left	24f21425-b001-4986-aedf-5b4dd851c6ad		64, 3	
 152	2	Upper_Right	419deaac-ea45-4bdd-9fa0-b5cd8429b44f		66, 1	
-152	3	Lower_Left	8c1dd7f7-b74a-4fa2-b6a7-86f0348d2567		7, 8	
-152	4	Lower_Right	CGP_donor_1691134		7, 2	
+152	3	Lower_Left	8c1dd7f7-b74a-4fa2-b6a7-86f0348d2567		84, 2	
+152	4	Lower_Right	CGP_donor_1691134		45, 2	
 153	1	Upper_Left	CGP_donor_1347723		48, 4	
 153	2	Upper_Right	CGP_donor_1397278		42, 2	
-153	3	Lower_Left	CGP_donor_1069291		8, 6	
-153	4	Lower_Right	CGP_donor_1069291		7, 2	
+153	3	Lower_Left	CGP_donor_1069291		46, 1	
+153	4	Lower_Right	CGP_donor_1069291		46, 1	
 154	1	Upper_Left	CGP_donor_1347720		37, 1	
 154	2	Upper_Right	CGP_donor_1347720		37, 1	
-154	3	Lower_Left	CGP_donor_1353432		9, 3	
-154	4	Lower_Right	CGP_donor_1363963		7, 2	
+154	3	Lower_Left	CGP_donor_1353432		89, 3	
+154	4	Lower_Right	CGP_donor_1363963		18, 2	
 155	1	Upper_Left	CGP_donor_1374619		38, 1	
 155	2	Upper_Right	CGP_donor_1472394		7, 1	
-155	3	Lower_Left	1549dc64-3dab-43fc-96e9-b07d520957e1		7, 0	
-155	4	Lower_Right	174850b4-5ec2-462b-a890-89bd1716b3c2		14, 15	
+155	3	Lower_Left	1549dc64-3dab-43fc-96e9-b07d520957e1		79, 1	
+155	4	Lower_Right	174850b4-5ec2-462b-a890-89bd1716b3c2		47, 3	
 156	1	Upper_Left	5ed024e8-d05e-4c65-9441-eda9930ccc82		38, 2	
 156	2	Upper_Right	6956473b-92e5-4069-a26b-b48e280e76f2		56, 1	
-156	3	Lower_Left	75113445-d2d6-44a0-866c-c9175e6d214b		7, 5	
-156	4	Lower_Right	790ff5db-b7f3-4946-aaed-305f66b1dd6a		9, 7	
+156	3	Lower_Left	75113445-d2d6-44a0-866c-c9175e6d214b		76, 2	
+156	4	Lower_Right	790ff5db-b7f3-4946-aaed-305f66b1dd6a		54, 1	
 157	1	Upper_Left	88db1340-e4bf-451a-87c0-6e9168296f5e		53, 1	
 157	2	Upper_Right	9f6be944-83de-42ab-8738-f0022f475e61		6, 3	
-157	3	Lower_Left	a9b7d7fe-be31-4f71-afee-c1bfdf511888		7, 5	
-157	4	Lower_Right	a9b7d7fe-be31-4f71-afee-c1bfdf511888		9, 9	
+157	3	Lower_Left	a9b7d7fe-be31-4f71-afee-c1bfdf511888		47, 2	
+157	4	Lower_Right	a9b7d7fe-be31-4f71-afee-c1bfdf511888		47, 2	
 158	1	Upper_Left	d2f2560c-ec80-4fea-9474-c47a2e85ea95		67, 3	
 158	2	Upper_Right	e4fc0909-f284-4471-866d-d8967b6adcbc		49, 2	
-158	3	Lower_Left	f05d314c-5ec5-4e2a-b785-9a702716f111		8, 0	
-158	4	Lower_Right	CGP_donor_1451422		12, 22	
+158	3	Lower_Left	f05d314c-5ec5-4e2a-b785-9a702716f111		89, 2	
+158	4	Lower_Right	CGP_donor_1451422		57, 1	
 159	1	Upper_Left	a3be445a-a592-4073-815b-47ae41f9c4a0		77, 3	
 159	2	Upper_Right	941f75a1-fea4-4539-ba69-60bb11608f6d		68, 2	
-159	3	Lower_Left	941f75a1-fea4-4539-ba69-60bb11608f6d		13, 17	
-159	4	Lower_Right	e733f289-a0ec-478c-aad9-1378ad26ddfa		7, 7	
+159	3	Lower_Left	941f75a1-fea4-4539-ba69-60bb11608f6d		68, 2	
+159	4	Lower_Right	e733f289-a0ec-478c-aad9-1378ad26ddfa		64, 2	
 160	1	Upper_Left	eb59cf69-1997-41b9-bf69-69ad7da292a1		4, 3	
 160	2	Upper_Right	17dffffc-65d6-4209-9075-18a441001f0f		48, 1	
-160	3	Lower_Left	3258cb3b-f63b-463c-b2e4-d638149157c5		9, 2	
-160	4	Lower_Right	6e6962d8-34b8-431c-8220-42b0b92a410b		11, 14	
+160	3	Lower_Left	3258cb3b-f63b-463c-b2e4-d638149157c5		81, 2	
+160	4	Lower_Right	6e6962d8-34b8-431c-8220-42b0b92a410b		86, 1	
 161	1	Upper_Left	a515cf2d-e918-4958-9bf6-e611b425a97e		53, 2	
 161	2	Upper_Right	be3a7ef3-34ed-40e1-9d9c-187940596b26		71, 1	
-161	3	Lower_Left	ICGC_MB36		10, 17	
-161	4	Lower_Right	490eabca-4575-4bd6-9604-6b6e23d069ce		8, 8	
+161	3	Lower_Left	ICGC_MB36		99, 2	
+161	4	Lower_Right	490eabca-4575-4bd6-9604-6b6e23d069ce		72, 4	
 162	1	Upper_Left	bfb07784-693b-4c25-874e-4ad6e04a5d46		58, 2	
 162	2	Upper_Right	c83d38fc-e011-4f75-a100-96513611f3e9		56, 3	
-162	3	Lower_Left	fafd4576-0709-49e1-926f-ad1ee09907ec		8, 4	
-162	4	Lower_Right	0bb786ee-07cf-4853-9b49-ec95cd14e282		7, 0	
+162	3	Lower_Left	fafd4576-0709-49e1-926f-ad1ee09907ec		88, 3	
+162	4	Lower_Right	0bb786ee-07cf-4853-9b49-ec95cd14e282		66, 3	
 163	1	Upper_Left	8feb0e8f-d09b-437d-8651-0cdecfe776bf		75, 1	
 163	2	Upper_Right	8feb0e8f-d09b-437d-8651-0cdecfe776bf		75, 1	
-163	3	Lower_Left	OCCAMS-AH-071		7, 0	
-163	4	Lower_Right	OCCAMS-AH-131		7, 1	
+163	3	Lower_Left	OCCAMS-AH-071		39, 2	
+163	4	Lower_Right	OCCAMS-AH-131		53, 2	
 164	1	Upper_Left	OCCAMS-AH-135		55, 2	
 164	2	Upper_Right	OCCAMS-AH-135		55, 2	
-164	3	Lower_Left	OCCAMS-AH-143		7, 4	
-164	4	Lower_Right	OCCAMS-AH-213		7, 2	
+164	3	Lower_Left	OCCAMS-AH-143		46, 2	
+164	4	Lower_Right	OCCAMS-AH-213		57, 2	
 165	1	Upper_Left	OCCAMS-WG-005		38, 2	
 165	2	Upper_Right	OCCAMS-WG-008		4, 2	
-165	3	Lower_Left	05fbd98c-28bd-41bc-ae60-16ac0c16c723		19, 2	
-165	4	Lower_Right	05fbd98c-28bd-41bc-ae60-16ac0c16c723			
+165	3	Lower_Left	05fbd98c-28bd-41bc-ae60-16ac0c16c723		39, 3	
+165	4	Lower_Right	05fbd98c-28bd-41bc-ae60-16ac0c16c723		39, 3	
 166	1	Upper_Left	0956bc67-dd55-4c54-a56a-f22f2856662a		75, 1	
 166	2	Upper_Right	ba9d4568-71a8-41fc-a2be-0bf784e36d6a		8, 1	
-166	3	Lower_Left	ba9d4568-71a8-41fc-a2be-0bf784e36d6a		7, 0	
-166	4	Lower_Right	e8ac39e6-377a-412c-b18d-f6c4fc654ec6		7, 2	
+166	3	Lower_Left	ba9d4568-71a8-41fc-a2be-0bf784e36d6a		8, 1	
+166	4	Lower_Right	e8ac39e6-377a-412c-b18d-f6c4fc654ec6		46, 3	
 167	1	Upper_Left	OSCC-GB_012501		55, 2	
 167	2	Upper_Right	b08dfba8-6afb-4217-9259-72be6f1f3363		77, 2	
-167	3	Lower_Left	9da334ed-314c-4445-ba29-ffd9bb42403c			
+167	3	Lower_Left	9da334ed-314c-4445-ba29-ffd9bb42403c		71, 1	
 167	4	Lower_Right	71b35cd8-ecee-4599-bb24-b1ef78118423		7, 2	
 168	1	Upper_Left	C0009		41, 1	
 168	2	Upper_Right	C0046		46, 1	
-168	3	Lower_Left	C0075		7, 1	
-168	4	Lower_Right	18c08546-bed3-4ed9-b223-479afe633c8e			
+168	3	Lower_Left	C0075		64, 1	
+168	4	Lower_Right	18c08546-bed3-4ed9-b223-479afe633c8e		8, 3	
 169	1	Upper_Left	4bbdbe77-f3cb-4b64-9826-72debb734784		82, 2	
 169	2	Upper_Right	4bbdbe77-f3cb-4b64-9826-72debb734784		82, 2	
-169	3	Lower_Left	68015cc7-d3a1-4c90-b8fb-5d14143d9960		10, 11	
-169	4	Lower_Right	8afa3140-dcbd-44c0-ab13-4ada6a0444d4		17, 3	
+169	3	Lower_Left	68015cc7-d3a1-4c90-b8fb-5d14143d9960		83, 2	
+169	4	Lower_Right	8afa3140-dcbd-44c0-ab13-4ada6a0444d4		84, 3	
 170	1	Upper_Left	8afa3140-dcbd-44c0-ab13-4ada6a0444d4		84, 3	
 170	2	Upper_Right	8afa3140-dcbd-44c0-ab13-4ada6a0444d4		84, 3	
-170	3	Lower_Left	bd48fa5e-0152-46f0-a4fa-8cf723ff2dcd		10, 8	
-170	4	Lower_Right	bd48fa5e-0152-46f0-a4fa-8cf723ff2dcd		13, 9	
+170	3	Lower_Left	bd48fa5e-0152-46f0-a4fa-8cf723ff2dcd		57, 2	
+170	4	Lower_Right	bd48fa5e-0152-46f0-a4fa-8cf723ff2dcd		57, 2	
 171	1	Upper_Left	bd48fa5e-0152-46f0-a4fa-8cf723ff2dcd		57, 2	
 171	2	Upper_Right	bd48fa5e-0152-46f0-a4fa-8cf723ff2dcd		57, 2	
-171	3	Lower_Left	bee9d6c8-948f-4b76-97ca-b985064249ef		7, 7	
-171	4	Lower_Right	RK006		7, 1	
+171	3	Lower_Left	bee9d6c8-948f-4b76-97ca-b985064249ef		62, 3	
+171	4	Lower_Right	RK006		7, 11	
 172	1	Upper_Left	RK025		33, 4	
 172	2	Upper_Right	RK036		14, 11	
-172	3	Lower_Left	RK042		7, 2	
-172	4	Lower_Right	RK070		9, 8	
+172	3	Lower_Left	RK042		88, 1	
+172	4	Lower_Right	RK070		6, 2	
 173	1	Upper_Left	RK072		7, 4	
 173	2	Upper_Right	RK080		77, 3	
-173	3	Lower_Left	RK080		9, 4	
-173	4	Lower_Right	RK087		9, 4	
+173	3	Lower_Left	RK080		77, 3	
+173	4	Lower_Right	RK087		26, 1	
 174	1	Upper_Left	RK087		26, 1	
 174	2	Upper_Right	RK125		72, 3	
-174	3	Lower_Left	RK148		17, 1	
-174	4	Lower_Right	RK148		9, 6	
+174	3	Lower_Left	RK148		9, 1	
+174	4	Lower_Right	RK148		9, 1	
 175	1	Upper_Left	RK207		38, 3	
 175	2	Upper_Right	RK216		84, 3	
-175	3	Lower_Left	RK234		7, 1	
-175	4	Lower_Right	RK244		7, 1	
+175	3	Lower_Left	RK234		76, 1	
+175	4	Lower_Right	RK244		86, 2	
 176	1	Upper_Left	RK245		47, 2	
 176	2	Upper_Right	RK258		17, 3	
-176	3	Lower_Left	RK261		7, 0	
+176	3	Lower_Left	RK261		7, 40	
 176	4	Lower_Right	RK261		11, 13	
 177	1	Upper_Left	RK283		25, 2	
 177	2	Upper_Right	RK289		15, 34	
-177	3	Lower_Left	RK304		7, 4	
-177	4	Lower_Right	RK304		8, 8	
+177	3	Lower_Left	RK304		25, 2	
+177	4	Lower_Right	RK304		25, 2	
 178	1	Upper_Left	RK337		38, 2	
 178	2	Upper_Right	RK337		38, 2	
-178	3	Lower_Left	RK337		8, 0	
-178	4	Lower_Right	21fb46f9-4bbb-441c-af19-a687e9138344		9, 2	
+178	3	Lower_Left	RK337		38, 2	
+178	4	Lower_Right	21fb46f9-4bbb-441c-af19-a687e9138344		49, 3	
 179	1	Upper_Left	31c96e35-5e2f-429c-b12a-7bc5a497a300		49, 4	
 179	2	Upper_Right	a8d6694c-a213-4544-ac0b-63bce16d8f4e		62, 2	
-179	3	Lower_Left	c4d1e105-28b7-48df-abef-fbe09782fdb2		7, 2	
-179	4	Lower_Right	d2824e6d-3784-45c2-9b0f-52b17356b5da		7, 3	
+179	3	Lower_Left	c4d1e105-28b7-48df-abef-fbe09782fdb2		82, 3	
+179	4	Lower_Right	d2824e6d-3784-45c2-9b0f-52b17356b5da		38, 3	
 180	1	Upper_Left	d2824e6d-3784-45c2-9b0f-52b17356b5da		38, 3	
 180	2	Upper_Right	d2824e6d-3784-45c2-9b0f-52b17356b5da		38, 3	
-180	3	Lower_Left	81b7cbc1-c037-426f-95b0-d729a30697da		9, 2	
-180	4	Lower_Right	9293e197-e38a-4e19-a7d0-1b45d1ad48bd		10, 1	
+180	3	Lower_Left	81b7cbc1-c037-426f-95b0-d729a30697da		56, 1	
+180	4	Lower_Right	9293e197-e38a-4e19-a7d0-1b45d1ad48bd		53, 3	
 181	1	Upper_Left	9a874b64-d0d6-416e-97bc-e9071ed0b16b		48, 2	
 181	2	Upper_Right	a3e1ac67-a1f2-44fb-8343-a7e8239fc24a		48, 1	
-181	3	Lower_Left	bd15f523-45c4-4d7c-a3cc-4fb56abb0e54		7, 1	
-181	4	Lower_Right	e6b72c24-1607-43b9-8b8a-7bf83eea5895		7, 1	
+181	3	Lower_Left	bd15f523-45c4-4d7c-a3cc-4fb56abb0e54		75, 3	
+181	4	Lower_Right	e6b72c24-1607-43b9-8b8a-7bf83eea5895		53, 3	
 182	1	Upper_Left	4105746		71, 2	
 182	2	Upper_Right	4111326		71, 1	
-182	3	Lower_Left	4134005		7, 2	
-182	4	Lower_Right	4135099		7, 7	
+182	3	Lower_Left	4134005		78, 1	
+182	4	Lower_Right	4135099		79, 1	
 183	1	Upper_Left	4135099		79, 1	
 183	2	Upper_Right	4135099		79, 1	
-183	3	Lower_Left	4138527		9, 2	
-183	4	Lower_Right	4163639		9, 7	
+183	3	Lower_Left	4138527		72, 2	
+183	4	Lower_Right	4163639		6, 2	
 184	1	Upper_Left	4176133		76, 1	
 184	2	Upper_Right	4196670		63, 2	
-184	3	Lower_Left	177		9, 3	
-184	4	Lower_Right	SNU_WGS_06		7, 1	
+184	3	Lower_Left	177		8, 1	
+184	4	Lower_Right	SNU_WGS_06		99, 1	
 185	1	Upper_Left	SNU_WGS_12		82, 2	
 185	2	Upper_Right	AOCS-060		68, 2	
-185	3	Lower_Left	AOCS-065		7, 9	
-185	4	Lower_Right	AOCS-086		7, 1	
+185	3	Lower_Left	AOCS-065		7, 1	
+185	4	Lower_Right	AOCS-086		52, 1	
 186	1	Upper_Left	AOCS-088		61, 1	
 186	2	Upper_Right	AOCS-091		74, 3	
-186	3	Lower_Left	AOCS-120		7, 2	
-186	4	Lower_Right	AOCS-120		7, 2	
+186	3	Lower_Left	AOCS-120		84, 2	
+186	4	Lower_Right	AOCS-120		84, 2	
 187	1	Upper_Left	AOCS-128		37, 3	
 187	2	Upper_Right	AOCS-128		37, 3	
-187	3	Lower_Left	AOCS-138			
-187	4	Lower_Right	AOCS-158		7, 4	
+187	3	Lower_Left	AOCS-138		65, 1	
+187	4	Lower_Right	AOCS-158		94, 1	
 188	1	Upper_Left	AOCS-167		81, 1	
 188	2	Upper_Right	AOCS-171		76, 1	
-188	3	Lower_Left	AOCS-171		9, 2	
-188	4	Lower_Right	098acb76-0bf5-44e5-bcae-f919cf5fa5e5		9, 2	
+188	3	Lower_Left	AOCS-171		76, 1	
+188	4	Lower_Right	098acb76-0bf5-44e5-bcae-f919cf5fa5e5		82, 3	
 189	1	Upper_Left	206ce0ed-36a4-47ab-ac8e-f6fca6ac5c18		75, 2	
 189	2	Upper_Right	2b14123b-8fcd-402c-9399-4e7c47f20252		77, 3	
-189	3	Lower_Left	4eac2c98-86d2-4ee6-a1d3-157d013c78dc		8, 2	
-189	4	Lower_Right	6d10d4ee-6331-4bba-93bc-a7b64cc0b22a			
+189	3	Lower_Left	4eac2c98-86d2-4ee6-a1d3-157d013c78dc		92, 1	
+189	4	Lower_Right	6d10d4ee-6331-4bba-93bc-a7b64cc0b22a		87, 1	
 190	1	Upper_Left	a5030259-cf9c-4a58-8710-b9da8ee59320		89, 1	
 190	2	Upper_Right	c8febeef-8e7e-459e-88cb-8086692dc559		9, 1	
-190	3	Lower_Left	f5033d52-ec36-4e67-88d8-b6d898b81b2f		12, 12	
-190	4	Lower_Right	ff530f28-0ec0-4494-bb54-44bb055bae1c		9, 2	
+190	3	Lower_Left	f5033d52-ec36-4e67-88d8-b6d898b81b2f		87, 1	
+190	4	Lower_Right	ff530f28-0ec0-4494-bb54-44bb055bae1c		7, 3	
 191	1	Upper_Left	ICGC_0006		41, 3	
 191	2	Upper_Right	ICGC_0124		36, 2	
-191	3	Lower_Left	ICGC_0140		13, 2	
-191	4	Lower_Right	ICGC_0201		9, 4	
+191	3	Lower_Left	ICGC_0140		85, 1	
+191	4	Lower_Right	ICGC_0201		43, 3	
 192	1	Upper_Left	ICGC_0227		37, 3	
 192	2	Upper_Right	ICGC_0543		53, 1	
-192	3	Lower_Left	PCSI_0078		7, 1	
-192	4	Lower_Right	PCSI_0109		9, 2	
+192	3	Lower_Left	PCSI_0078		7, 2	
+192	4	Lower_Right	PCSI_0109		42, 1	
 193	1	Upper_Left	PCSI_0161		63, 2	
 193	2	Upper_Right	PCSI_0161		63, 2	
-193	3	Lower_Left	PCSI_0218		9, 2	
-193	4	Lower_Right	PCSI_0285		7, 1	
+193	3	Lower_Left	PCSI_0218		64, 1	
+193	4	Lower_Right	PCSI_0285		56, 3	
 194	1	Upper_Left	PCSI_0334		78, 1	
 194	2	Upper_Right	PCSI_0456		8, 3	
-194	3	Lower_Left	PCSI_0457		9, 5	
-194	4	Lower_Right	PCSI_0468		9, 3	
+194	3	Lower_Left	PCSI_0457		74, 1	
+194	4	Lower_Right	PCSI_0468		79, 3	
 195	1	Upper_Left	PCSI_0492		65, 2	
 195	2	Upper_Right	PCSI_0504		75, 1	
-195	3	Lower_Left	PCSI_0504		9, 5	
-195	4	Lower_Right	PCSI_0528		7, 1	
+195	3	Lower_Left	PCSI_0504		75, 1	
+195	4	Lower_Right	PCSI_0528		52, 3	
 196	1	Upper_Left	ITNET-0100		95, 1	
 196	2	Upper_Right	EOPC-01		53, 1	
-196	3	Lower_Left	EOPC-01		9, 1	
-196	4	Lower_Right	EOPC-04		7, 5	
+196	3	Lower_Left	EOPC-01		53, 1	
+196	4	Lower_Right	EOPC-04		58, 1	
 197	1	Upper_Left	EOPC-04		58, 1	
 197	2	Upper_Right	EOPC-09		39, 1	
-197	3	Lower_Left	CPCG0046		7, 0	
-197	4	Lower_Right	CPCG0046		14, 19	
+197	3	Lower_Left	CPCG0046		66, 1	
+197	4	Lower_Right	CPCG0046		66, 1	
 198	1	Upper_Left	CPCG0057		56, 1	
 198	2	Upper_Right	CPCG0057		56, 1	
-198	3	Lower_Left	CPCG0057		7, 0	
-198	4	Lower_Right	CPCG0057		7, 1	
+198	3	Lower_Left	CPCG0057		56, 1	
+198	4	Lower_Right	CPCG0057		56, 1	
 199	1	Upper_Left	CPCG0094		46, 1	
 199	2	Upper_Right	CPCG0102		24, 1	
-199	3	Lower_Left	CPCG0121		7, 4	
-199	4	Lower_Right	CPCG0121		7, 0	
+199	3	Lower_Left	CPCG0121		36, 1	
+199	4	Lower_Right	CPCG0121		36, 1	
 200	1	Upper_Left	CPCG0213		49, 1	
 200	2	Upper_Right	CPCG0213		49, 1	
-200	3	Lower_Left	CPCG0213		7, 0	
-200	4	Lower_Right	CPCG0234		7, 5	
+200	3	Lower_Left	CPCG0213		49, 1	
+200	4	Lower_Right	CPCG0234		97, 1	
 201	1	Upper_Left	CPCG0250		26, 1	
 201	2	Upper_Right	CPCG0250		26, 1	
-201	3	Lower_Left	CPCG0250		7, 9	
-201	4	Lower_Right	CPCG0250		7, 0	
+201	3	Lower_Left	CPCG0250		26, 1	
+201	4	Lower_Right	CPCG0250		26, 1	
 202	1	Upper_Left	CPCG0266		51, 1	
 202	2	Upper_Right	CPCG0266		51, 1	
-202	3	Lower_Left	CPCG0266		7, 9	
-202	4	Lower_Right	CPCG0266		7, 1	
+202	3	Lower_Left	CPCG0266		51, 1	
+202	4	Lower_Right	CPCG0266		51, 1	
 203	1	Upper_Left	CPCG0339		97, 1	
 203	2	Upper_Right	CPCG0341		55, 1	
-203	3	Lower_Left	CPCG0345		7, 7	
-203	4	Lower_Right	CPCG0345		9, 0	
+203	3	Lower_Left	CPCG0345		49, 2	
+203	4	Lower_Right	CPCG0345		49, 2	
 204	1	Upper_Left	CPCG0371		55, 1	
 204	2	Upper_Right	CPCG0371		55, 1	
-204	3	Lower_Left	0078_CRUK_PC_0078		11, 95	
-204	4	Lower_Right	A10-0015_CRUK_PC_0015		28, 6	
+204	3	Lower_Left	0078_CRUK_PC_0078		28, 1	
+204	4	Lower_Right	A10-0015_CRUK_PC_0015		28, 45	
