@@ -5,6 +5,8 @@ __pycache__/
 SV_graph.simulated/TCGA_graph/
 SV_graph.simulated/TCGA_single_sample/
 test/
+model_data/test
+model_data/train
 
 .DS_Store
 tmp.*
