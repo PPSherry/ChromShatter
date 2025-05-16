@@ -7,8 +7,10 @@ SV_graph.simulated/TCGA_single_sample/
 test/
 model_data/test
 model_data/train
+label_model_data/graph_dir/
 
 .DS_Store
 tmp.*
+tmp[1-9].*
 *.zip
 R_log.txt
