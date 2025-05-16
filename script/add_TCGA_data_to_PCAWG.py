@@ -20,7 +20,9 @@ TARGET_GRAPH_DIR = os.path.join(BASE_DIR, "label_model_data/graph_dir")  # 存�
 # 格式: {列名: (比较操作, 值)}
 # 比较操作可以是: '==', '!=', '>', '<', '>=', '<=', 'in', 'contains'
 filter_conditions = {
-    "chromothripsis_status": ("in", ["High Confidence", "Low Confidence"]),
+    #"max_number_oscillating_CN_segments_2_states": ("==", 3),
+    "clusterSize": ("<", 4),
+    #"chromothripsis_status": ("in", ["High Confidence", "Low Confidence"]),
     # 例如: "number_CNV_segments": (">", 5),
     # 例如: "plot_path": ("contains", ".png")
 }
@@ -127,9 +129,45 @@ def copy_image(src_path, dest_path):
         print(f"复制图片时出错: {str(e)}")
         return False
 
+def is_duplicate_entry(row, df):
+    """检查行是否已存在于数据框中"""
+    duplicate = df[
+        (df['sample_name'] == row['sample_name']) & 
+        (df['Chr'] == row['Chr']) & 
+        (df['Start'] == row['Start']) & 
+        (df['End'] == row['End'])
+    ]
+    return not duplicate.empty
+
+def remove_duplicates(df):
+    """移除重复的行，只保留第一个出现的行"""
+    # 确保数据类型一致
+    df['Chr'] = df['Chr'].astype(str)
+    df['Start'] = pd.to_numeric(df['Start'], errors='coerce')
+    df['End'] = pd.to_numeric(df['End'], errors='coerce')
+    
+    # 找出重复的行，只保留第一次出现的
+    df_no_duplicates = df.drop_duplicates(subset=['sample_name', 'Chr', 'Start', 'End'], keep='first')
+    
+    # 如果有行被移除，打印信息
+    dropped_rows = len(df) - len(df_no_duplicates)
+    if dropped_rows > 0:
+        print(f"移除了 {dropped_rows} 行重复数据")
+    
+    return df_no_duplicates
+
 def main():
     print("加载数据...")
     all_samples_df, merge_data_df = load_data()
+    
+    # 首先检查并移除merge_data_df中的重复项
+    print("检查并移除现有数据中的重复项...")
+    original_len = len(merge_data_df)
+    merge_data_df = remove_duplicates(merge_data_df)
+    if len(merge_data_df) < original_len:
+        # 如果移除了重复项，则保存更新后的文件
+        merge_data_df.to_csv(MERGE_DATA, sep='\t', index=False)
+        print(f"已将去重后的数据保存到 {MERGE_DATA}")
     
     print(f"原始数据共 {len(all_samples_df)} 行")
     print(f"应用筛选条件: {filter_conditions}")
@@ -144,18 +182,38 @@ def main():
     # 统计已处理的行数和追加的行数
     processed_count = 0
     appended_count = 0
+    skipped_duplicates = 0
+    
+    # 设置是否用户要求退出的标志
+    user_quit = False
     
     # 逐行处理筛选后的数据
     for idx, row in filtered_df.iterrows():
+        if user_quit:
+            break
+            
         processed_count += 1
         
         print("\n" + "="*80)
         print(f"处理第 {processed_count}/{len(filtered_df)} 行:")
         
+        # 映射行数据到PCAWG格式（用于检查是否重复）
+        pcawg_row = map_row_to_pcawg_format(row)
+        
+        # 检查是否重复
+        if is_duplicate_entry(pcawg_row, merge_data_df):
+            print(f"跳过重复项: {pcawg_row['sample_name']}, Chr={pcawg_row['Chr']}, Start={pcawg_row['Start']}, End={pcawg_row['End']}")
+            skipped_duplicates += 1
+            continue
+        
         # 显示行的关键信息
         print(f"case_id: {row['case_id']}, chrom: {row['chrom']}")
         print(f"chromothripsis_status: {row['chromothripsis_status']}")
-        print(f"cn_2: {row['max_number_oscillating_CN_segments_2_states']}", "cn_3: {row['max_number_oscillating_CN_segments_3_states']}", "cn_segments: {row['number_CNV_segments']}")
+        print(f"    HC_standard: {row['HC_standard']}")
+        print(f"    HC_supplement1: {row['HC_supplement1']}")
+        print(f"    HC_supplement2: {row['HC_supplement2']}")
+        print(f"    LC: {row['LC']}")
+        print(f"cn_2: {row['max_number_oscillating_CN_segments_2_states']}", f"cn_3: {row['max_number_oscillating_CN_segments_3_states']}")
         print(f"cn_segments: {row['number_CNV_segments']}")
         print(f"clusterSize: {row['clusterSize']}")
         print(f"Plot: {row['plot_path']}")
@@ -170,11 +228,12 @@ def main():
         
         # 获取用户判断
         while True:
-            user_input = input("\n请判断此图是否为染色体碎裂事件 (1=是/真阳性, 0=否/假阳性, -1=无法判断, q=退出): ").strip()
+            user_input = input("\n请判断此图是否为染色体碎裂事件 (1=阳性, 0=阴性, -1=无法判断, q=退出): ").strip()
             
             if user_input.lower() == 'q':
-                print("用户退出")
-                return
+                print("用户选择退出标注过程")
+                user_quit = True
+                break
             
             try:
                 judgment = int(user_input)
@@ -185,13 +244,16 @@ def main():
             except ValueError:
                 print("输入无效，请输入 1, 0 或 -1")
         
+        # 如果用户要求退出，跳过剩余处理
+        if user_quit:
+            continue
+            
         # 如果用户无法判断，则跳过此行
         if judgment == -1:
             print("用户无法判断，跳过此行")
             continue
         
-        # 映射行数据到PCAWG格式
-        pcawg_row = map_row_to_pcawg_format(row)
+        # 设置用户输入的判断结果
         pcawg_row['label'] = judgment
         
         # 计算shatterSeek_label_TorF
@@ -221,7 +283,20 @@ def main():
         appended_count += 1
     
     print("\n" + "="*80)
-    print(f"处理完成, 共处理 {processed_count} 行, 追加 {appended_count} 行到 {MERGE_DATA}")
+    print(f"处理完成, 共处理 {processed_count} 行")
+    print(f"跳过 {skipped_duplicates} 个重复项")
+    print(f"追加 {appended_count} 行到 {MERGE_DATA}")
+    
+    if user_quit:
+        print("用户中途退出，以上是已完成部分的汇总信息")
+    
+    # 最后再次检查并移除可能的重复项
+    print("\n检查最终数据中的重复项...")
+    final_df = pd.read_csv(MERGE_DATA, sep='\t')
+    final_df_no_dup = remove_duplicates(final_df)
+    if len(final_df_no_dup) < len(final_df):
+        final_df_no_dup.to_csv(MERGE_DATA, sep='\t', index=False)
+        print(f"已将最终去重后的数据保存到 {MERGE_DATA}")
 
 if __name__ == "__main__":
     main()
