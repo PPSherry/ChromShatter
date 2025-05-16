@@ -10,6 +10,7 @@ model_data/train
 label_model_data/graph_dir/
 label_model_data/test/
 label_model_data/train/
+label_model_data/processed_data/
 
 .DS_Store
 tmp.*
