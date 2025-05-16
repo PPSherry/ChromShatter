@@ -8,6 +8,8 @@ test/
 model_data/test
 model_data/train
 label_model_data/graph_dir/
+label_model_data/test/
+label_model_data/train/
 
 .DS_Store
 tmp.*
