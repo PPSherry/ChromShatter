@@ -20,9 +20,9 @@ TARGET_GRAPH_DIR = os.path.join(BASE_DIR, "label_model_data/graph_dir")  # 存�
 # 格式: {列名: (比较操作, 值)}
 # 比较操作可以是: '==', '!=', '>', '<', '>=', '<=', 'in', 'contains'
 filter_conditions = {
-    #"max_number_oscillating_CN_segments_2_states": ("==", 3),
-    "clusterSize": ("<", 4),
-    #"chromothripsis_status": ("in", ["High Confidence", "Low Confidence"]),
+    "max_number_oscillating_CN_segments_2_states": ("<=", 3),
+    "clusterSize": (">", 5),
+    "chromothripsis_status": ("in", ["Not Significant"]),
     # 例如: "number_CNV_segments": (">", 5),
     # 例如: "plot_path": ("contains", ".png")
 }
@@ -106,7 +106,15 @@ def map_row_to_pcawg_format(row):
     # 应用映射关系
     for tcga_col, pcawg_col in mapping.items():
         if tcga_col in row.index:
-            pcawg_row[pcawg_col] = row[tcga_col]
+            # 转换特定列为整数类型
+            if pcawg_col in ['Start', 'End', 'cn_2', 'cn_3', 'cn_segments']:
+                try:
+                    pcawg_row[pcawg_col] = int(row[tcga_col])
+                except (ValueError, TypeError):
+                    print(f"警告: 无法将{tcga_col}({row[tcga_col]})转换为整数，保留原值")
+                    pcawg_row[pcawg_col] = row[tcga_col]
+            else:
+                pcawg_row[pcawg_col] = row[tcga_col]
     
     # 添加label列(用户输入的判断)
     pcawg_row['label'] = None  # 将由用户输入填充
