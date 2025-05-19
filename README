@@ -1,0 +1,12 @@
+# File Structure
+
+## model
+./model_data contains model training with only PCAWG labeled data (using whether chromothripsis occurs in a chromosome as Y label)
+./label_model_data contains model training with PCAWG labeled data and part of TCGA data
+which can be surely labelled by the author of this research (using whether shatterSeek output aligns with manual inspection as
+Y label)
+./model_extended_data contains model training with PCAWG labeled data and part of TCGA data (using whether chromothripsis occurs 
+in a chromosome as Y label)
+
+## data
+
