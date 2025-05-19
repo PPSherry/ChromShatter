@@ -12,6 +12,8 @@ label_model_data/test/
 label_model_data/train/
 label_model_data/processed_data/
 graph_dir/
+model_extended_data/test/
+model_extended_data/train/
 
 .DS_Store
 tmp.*
