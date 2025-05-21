@@ -242,7 +242,7 @@ namespace torali
       
   template<typename TConfig, typename TValidRegion, typename TSRStore, typename TSampleLib>
   inline void
-  scanPEandSR(TConfig const& c, TValidRegion const& validRegions, std::vector<StructuralVariantRecord>& svs, std::vector<StructuralVariantRecord>& srSVs, TSRStore& srStore, TSampleLib& sampleLib)
+  scanPEandSR(TConfig const& c, TValidRegion const& validRegions, std::vector<StructuralVariantRecord>& svs, std::vector<StructuralVariantRecord>& srSVs, TSRStore& srStore, TSampleLib& sampleLib, int sampleIdx = -1)
   {
     typedef typename TValidRegion::value_type TChrIntervals;
 
@@ -274,6 +274,9 @@ namespace torali
     // Iterate all samples
 #pragma omp parallel for default(shared)
     for(unsigned int file_c = 0; file_c < c.files.size(); ++file_c) {
+      // 添加这一行来检查sampleIdx
+      if (sampleIdx != -1 && file_c != sampleIdx) continue;
+      
       // Inter-chromosomal mate map and alignment length
       typedef std::pair<uint8_t, int32_t> TQualLen;
       typedef boost::unordered_map<std::size_t, TQualLen> TMateMap;

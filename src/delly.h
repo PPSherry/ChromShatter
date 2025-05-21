@@ -318,7 +318,7 @@ namespace torali
 	typedef boost::unordered_map<TPosRead, int32_t> TPosReadSV;
 	typedef std::vector<TPosReadSV> TGenomicPosReadSV;
 	TGenomicPosReadSV srStore(c.nchr, TPosReadSV());
-	scanPEandSR(c, validRegions, svs, srSVs, srStore, sampleLib);
+	scanPEandSR(c, validRegions, svs, srSVs, srStore, sampleLib, 0);
 	
 	// Assemble split-read calls
 	assembleSplitReads(c, validRegions, srStore, srSVs);
@@ -363,7 +363,7 @@ namespace torali
       typedef boost::unordered_map<TPosRead, int32_t> TPosReadSV;
       typedef std::vector<TPosReadSV> TGenomicPosReadSV;
       TGenomicPosReadSV srStore2(c.nchr, TPosReadSV());
-      scanPEandSR(c, validRegions, svs2, srSVs2, srStore2, sampleLib);
+      scanPEandSR(c, validRegions, svs2, srSVs2, srStore2, sampleLib, 1);
       
       // Assemble split-read calls
       assembleSplitReads(c, validRegions, srStore2, srSVs2);
