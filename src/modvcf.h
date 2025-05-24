@@ -5,6 +5,7 @@
 #include <htslib/vcf.h>
 
 #include "bolog.h"
+#include "version.h"
 
 
 
@@ -458,7 +459,7 @@ vcfOutput(TConfig const& c, std::vector<TStructuralVariantRecord> const& svs, TJ
       else bcf_update_info_flag(hdr, rec, "IMPRECISE", NULL, 1);
       bcf_update_info_string(hdr, rec, "SVTYPE", _addID(svIter->svt).c_str());
       std::string dellyVersion("EMBL.DELLYv");
-      dellyVersion += dellyVersionNumber;
+      dellyVersion += chromShatterVersionNumber;
       bcf_update_info_string(hdr,rec, "SVMETHOD", dellyVersion.c_str());
       if (svIter->svt < DELLY_SVT_TRANS) {
 	if (svEndPos <= svStartPos) svEndPos = svStartPos + 1;

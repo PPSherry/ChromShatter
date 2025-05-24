@@ -1,5 +1,5 @@
-#ifndef DELLY_H
-#define DELLY_H
+#ifndef CHROMSHATTER_H
+#define CHROMSHATTER_H
 
 
 #include <iostream>
@@ -262,9 +262,9 @@ namespace torali
   }
 
   template<typename TConfigStruct>
-  inline int dellyRun(TConfigStruct& c) {
+  inline int chromShatterRun(TConfigStruct& c) {
 #ifdef PROFILE
-    ProfilerStart("delly.prof");
+    ProfilerStart("chromshatter.prof");
 #endif
 
     // Collect all promising structural variants
@@ -280,7 +280,7 @@ namespace torali
     typedef std::vector<TChrIntervals> TRegionsGenome;
     TRegionsGenome validRegions;
     if (!_parseExcludeIntervals(c, hdr, validRegions)) {
-      std::cerr << "Delly couldn't parse exclude intervals!" << std::endl;
+      std::cerr << "ChromShatter couldn't parse exclude intervals!" << std::endl;
       bam_hdr_destroy(hdr);
       sam_close(samfile);
       return 1;
@@ -402,7 +402,7 @@ namespace torali
   }
 
 
-  int delly(int argc, char **argv) {
+  int chromShatter(int argc, char **argv) {
     Config c;
     c.madNormalCutoff = 5;
     
@@ -451,7 +451,7 @@ namespace torali
     // Check command line arguments
     if ((vm.count("help")) || (!vm.count("input-file")) || (!vm.count("genome"))) { 
       std::cerr << std::endl;
-      std::cerr << "Usage: delly " << argv[0] << " [OPTIONS] -g <ref.fa> <tumor.sort.bam> <normal.sort.bam>" << std::endl;
+      std::cerr << "Usage: chromshatter " << argv[0] << " [OPTIONS] -g <ref.fa> <tumor.sort.bam> <normal.sort.bam>" << std::endl;
       std::cerr << "For somatic SV calling: first sample is tumor, second sample is control" << std::endl;
       std::cerr << visible_options << "\n";
       return 0;
@@ -487,7 +487,7 @@ namespace torali
     // Show cmd
     boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
     std::cerr << '[' << boost::posix_time::to_simple_string(now) << "] ";
-    std::cerr << "delly ";
+    std::cerr << "chromshatter ";
     for(int i=0; i<argc; ++i) { std::cerr << argv[i] << ' '; }
     std::cerr << std::endl;
     
@@ -562,7 +562,7 @@ namespace torali
     c.flankQuality = 0.95;
     c.minimumFlankSize = 13;
     c.indelsize = 1000;
-    return dellyRun(c);
+    return chromShatterRun(c);
   }
 
 }

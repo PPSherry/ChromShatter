@@ -5,19 +5,18 @@ namespace torali
 {
 
 
-  std::string dellyVersionNumber = "1.3.3";
+std::string chromShatterVersionNumber = "1.0.0";
 
   inline 
     void printTitle(std::string const& title) 
     {
       std::cerr << "**********************************************************************" << std::endl;
-      std::cerr << "Program: Delly" << std::endl;
+      std::cerr << "Program: ChromShatter" << std::endl;
       std::cerr << "This is free software, and you are welcome to redistribute it under" << std::endl;
       std::cerr << "certain conditions (BSD License); for license details use '-l'." << std::endl;
       std::cerr << "This program comes with ABSOLUTELY NO WARRANTY; for details use '-w'." << std::endl;
       std::cerr <<  std::endl;
-      std::cerr <<  title << " (Version: " << dellyVersionNumber << ")" << std::endl;
-      std::cerr << "Contact: Tobias Rausch (rausch@embl.de)" << std::endl;
+      std::cerr <<  title << " (Version: " << chromShatterVersionNumber << ")" << std::endl;
       std::cerr << "**********************************************************************" << std::endl;
       std::cerr << std::endl;
     }

@@ -54,7 +54,7 @@ HTSLIBSOURCES = $(wildcard src/htslib/*.c) $(wildcard src/htslib/*.h)
 SOURCES = $(wildcard src/*.h) $(wildcard src/*.cpp)
 
 # Targets
-BUILT_PROGRAMS = src/ChromShatter
+BUILT_PROGRAMS = bin/chromshatter
 TARGETS = ${SUBMODULES} ${BUILT_PROGRAMS}
 
 all:   	$(TARGETS)
@@ -69,7 +69,7 @@ all:   	$(TARGETS)
 		cd ../../ && touch .htslib; 
 	fi
 
-src/ChromShatter: ${SUBMODULES} $(SOURCES)
+bin/chromshatter: ${SUBMODULES} $(SOURCES)
 	$(CXX) $(CXXFLAGS) $@.cpp src/edlib.cpp -o $@ $(LDFLAGS)
 
 install: ${BUILT_PROGRAMS}
