@@ -18,7 +18,7 @@ This command would output a .tsv file, which contain SV info and can be used in 
 
 License
 -------
-ChromShatter is distributed under the BSD 3-Clause license. Consult the accompanying [LICENSE](https://github.com/ppsherry/main/LICENSE) file for more details.
+ChromShatter is distributed under the BSD 3-Clause license. Consult the accompanying [LICENSE](https://github.com/PPSherry/ChromShatter/blob/main/LICENSE) file for more details.
 
 Credits
 -------
