@@ -22,5 +22,5 @@ ChromShatter is distributed under the BSD 3-Clause license. Consult the accompan
 
 Credits
 -------
-[HTSlib](https://github.com/samtools/htslib) is heavily used for all genomic alignment and variant processing. [Boost](https://www.boost.org/) for various data structures and algorithms and [Edlib](https://github.com/Martinsos/edlib) for pairwise alignments using edit distance.
+[Delly](https://github.com/dellytools/delly) is a widely used bioinformatics tool for structure variant detection. [HTSlib](https://github.com/samtools/htslib) is heavily used for all genomic alignment and variant processing. [Boost](https://www.boost.org/) for various data structures and algorithms and [Edlib](https://github.com/Martinsos/edlib) for pairwise alignments using edit distance.
 
