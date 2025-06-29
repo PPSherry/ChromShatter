@@ -1,6 +1,52 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+TCGA数据添加到PCAWG数据集脚本
+
+=== 脚本功能总结 ===
+本脚本用于从TCGA染色体碎裂数据中筛选样本，通过人工标注的方式验证染色体碎裂事件，
+并将标注后的数据整合到现有的PCAWG数据集中。
+
+=== 主要功能 ===
+1. 数据筛选：根据预设条件从TCGA数据中筛选候选样本
+2. 图像展示：显示每个候选样本的SV图像供用户判断
+3. 人工标注：用户手动标注每个样本是否为染色体碎裂事件
+4. 数据整合：将标注后的数据转换为PCAWG格式并追加到现有数据集
+5. 图像管理：将相关图像复制到统一的目录中
+6. 去重处理：自动检测和移除重复条目
+
+=== 使用方法 ===
+1. 确保以下文件/目录存在：
+   - SV_graph.simulated/all_samples_results.tsv (TCGA原始数据)
+   - label_model_data/merge_data.tsv (现有PCAWG数据集)
+   - SV_graph.simulated/TCGA_graph/ (TCGA图像目录)
+
+ 2. 修改筛选条件（第57-64行的filter_conditions）：
+   - 可以设置CN分段数、聚类大小、染色体碎裂状态等筛选条件
+   - 支持的比较操作：==, !=, >, <, >=, <=, in, contains
+
+3. 运行脚本：
+   python add_TCGA_data_to_PCAWG.py
+
+4. 交互标注：
+   - 对每个展示的图像进行判断
+   - 输入1表示阳性（染色体碎裂）
+   - 输入0表示阴性（非染色体碎裂）
+   - 输入-1表示无法判断（跳过）
+   - 输入q退出标注过程
+
+=== 输出结果 ===
+- 更新后的merge_data.tsv文件（包含新标注的数据）
+- 复制的图像文件到graph_dir目录
+- 处理统计信息（处理行数、追加行数、跳过重复项数等）
+
+=== 注意事项 ===
+- 脚本会自动去重，避免重复添加相同的数据条目
+- 用户可随时输入'q'退出，已处理的数据会被保存
+- 图像文件会被复制到统一目录便于后续使用
+"""
+
 import pandas as pd
 import os
 import shutil
@@ -12,9 +58,10 @@ import sys
 # 基础路径
 BASE_DIR = "/Volumes/T7-shield/CS-Bachelor-Thesis/CNN_model"
 ALL_SAMPLES_RESULTS = os.path.join(BASE_DIR, "SV_graph.simulated/all_samples_results.tsv")
-MERGE_DATA = os.path.join(BASE_DIR, "label_model_data/merge_data.tsv")
 SV_GRAPH_DIR = os.path.join(BASE_DIR, "SV_graph.simulated/TCGA_graph")  # 存放原始图片的目录
-TARGET_GRAPH_DIR = os.path.join(BASE_DIR, "label_model_data/graph_dir")  # 存放选中图片的目录
+
+MERGE_DATA = os.path.join(BASE_DIR, "semi_supervised_learning/manual_label/merge.tsv")
+TARGET_GRAPH_DIR = os.path.join(BASE_DIR, "semi_supervised_learning/manual_label/graph_dir")  # 存放选中图片的目录
 
 # 设置筛选条件 - 可以根据需要修改
 # 格式: {列名: (比较操作, 值)}
