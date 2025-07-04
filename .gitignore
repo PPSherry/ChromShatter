@@ -15,9 +15,12 @@ graph_dir/
 model_extended_data/test/
 model_extended_data/train/
 model_extended_data/processed_data/
+semi_supervised_learning/processed_data/
+semi_supervised_learning/model/
 
 .DS_Store
 tmp.*
 tmp[1-9].*
 *.zip
 R_log.txt
+*.md
