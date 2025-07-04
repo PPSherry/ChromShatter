@@ -690,7 +690,7 @@ best_model, best_score, all_results = evaluate_all_models(baseline_model, st_mod
 # 11. 与ShatterSeek的比较
 # =============================================================================
 
-def compare_with_shatterseek(best_model, val_features, val_labels, val_df=None):
+def compare_with_shatterseek(best_model, val_features, val_labels, val_df):
     """
     与ShatterSeek进行比较
     
@@ -703,7 +703,7 @@ def compare_with_shatterseek(best_model, val_features, val_labels, val_df=None):
         best_model: 最优模型
         val_features: 验证集特征
         val_labels: 验证集标签
-        val_df: 验证集DataFrame（包含ShatterSeek结果，如果有的话）
+        val_df: 验证集DataFrame（包含ShatterSeek结果）
     """
     print("\n" + "="*60)
     print("STEP 4: 与ShatterSeek性能比较")
@@ -724,46 +724,33 @@ def compare_with_shatterseek(best_model, val_features, val_labels, val_df=None):
     print(f"召回率: {recall_chromshatter:.4f}")
     print(f"F1分数: {f1_chromshatter:.4f}")
     
-    # 尝试获取ShatterSeek结果
-    shatterseek_available = False
-    if val_df is not None and 'shatterSeek_label' in val_df.columns:
-        shatterseek_pred = val_df['shatterSeek_label'].astype(int).values
-        
-        # 检查长度是否匹配
-        if len(shatterseek_pred) == len(val_labels):
-            shatterseek_available = True
-            
-            # 计算ShatterSeek指标
-            precision_shatterseek = precision_score(val_labels, shatterseek_pred)
-            recall_shatterseek = recall_score(val_labels, shatterseek_pred)
-            f1_shatterseek = f1_score(val_labels, shatterseek_pred)
-            
-            print(f"\nShatterSeek性能：")
-            print(f"精确率: {precision_shatterseek:.4f}")
-            print(f"召回率: {recall_shatterseek:.4f}")
-            print(f"F1分数: {f1_shatterseek:.4f}")
-            
-            # 绘制Precision-Recall比较图
-            plot_precision_recall_comparison(
-                val_labels, 
-                best_pred, 
-                shatterseek_pred,
-                precision_chromshatter, recall_chromshatter, f1_chromshatter,
-                precision_shatterseek, recall_shatterseek, f1_shatterseek
-            )
-        else:
-            print(f"警告: ShatterSeek结果长度({len(shatterseek_pred)})与标签长度({len(val_labels)})不匹配")
+    # 获取ShatterSeek结果
+    shatterseek_pred = val_df['shatterSeek_label'].astype(int).values
     
-    if not shatterseek_available:
-        print("\n警告: 验证集中未找到ShatterSeek结果，无法进行比较")
-        print("如需比较，请确保验证集数据包含'shatterSeek_label'列")
-        
-        # 只绘制ChromShatter的结果
-        plot_chromshatter_only(
-            val_labels, 
-            best_pred,
-            precision_chromshatter, recall_chromshatter, f1_chromshatter
-        )
+    # 计算ShatterSeek指标
+    precision_shatterseek = precision_score(val_labels, shatterseek_pred)
+    recall_shatterseek = recall_score(val_labels, shatterseek_pred)
+    f1_shatterseek = f1_score(val_labels, shatterseek_pred)
+    
+    print(f"\nShatterSeek性能：")
+    print(f"精确率: {precision_shatterseek:.4f}")
+    print(f"召回率: {recall_shatterseek:.4f}")
+    print(f"F1分数: {f1_shatterseek:.4f}")
+    
+    print(f"\n=== 性能比较 ===")
+    print(f"ChromShatter vs ShatterSeek:")
+    print(f"F1分数提升: {f1_chromshatter - f1_shatterseek:+.4f}")
+    print(f"精确率提升: {precision_chromshatter - precision_shatterseek:+.4f}")
+    print(f"召回率提升: {recall_chromshatter - recall_shatterseek:+.4f}")
+    
+    # 绘制Precision-Recall比较图
+    plot_precision_recall_comparison(
+        val_labels, 
+        best_pred, 
+        shatterseek_pred,
+        precision_chromshatter, recall_chromshatter, f1_chromshatter,
+        precision_shatterseek, recall_shatterseek, f1_shatterseek
+    )
 
 def plot_precision_recall_comparison(y_true, chromshatter_pred, shatterseek_pred,
                                    precision_cs, recall_cs, f1_cs,
@@ -828,67 +815,43 @@ def plot_precision_recall_comparison(y_true, chromshatter_pred, shatterseek_pred
     
     print(f"Precision-Recall比较图已保存到: {output_path}")
 
-def plot_chromshatter_only(y_true, chromshatter_pred, precision_cs, recall_cs, f1_cs):
+# 重新获取验证集对应的ShatterSeek结果
+def get_validation_shatterseek_results():
     """
-    仅绘制ChromShatter的Precision-Recall图
+    使用相同的随机种子重新分割数据，获取验证集对应的ShatterSeek结果
     """
-    plt.figure(figsize=(10, 8))
+    print("重新获取验证集对应的ShatterSeek结果...")
     
-    # 绘制F1等值线
-    def plot_f1_contours():
-        precision_range = np.linspace(0.01, 1, 100)
-        recall_range = np.linspace(0.01, 1, 100)
-        P, R = np.meshgrid(precision_range, recall_range)
-        
-        F1 = 2 * P * R / (P + R + 1e-10)
-        
-        levels = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-        contours = plt.contour(P, R, F1, levels=levels, colors='gray', linestyles='dashed', alpha=0.7)
-        plt.clabel(contours, inline=True, fontsize=10, fmt='$F = %.1f$')
+    # 重新加载原始数据
+    labeled_data_path = os.path.join(BASE_DIR, "semi_supervised_learning/manual_label/merge.tsv")
+    labeled_image_dir = os.path.join(BASE_DIR, "semi_supervised_learning/manual_label/graph_dir")
     
-    plot_f1_contours()
+    df_labeled = pd.read_csv(labeled_data_path, sep='\t')
     
-    # 绘制ChromShatter点
-    plt.scatter(precision_cs, recall_cs, marker='o', s=200, 
-               color='blue', label=f'ChromShatter (F1={f1_cs:.3f})', 
-               edgecolors='black', linewidth=2)
+    # 重新执行prepare_data函数
+    df_valid, image_paths, cnv_features, labels = prepare_data(
+        df_labeled, labeled_image_dir, is_labeled=True
+    )
     
-    plt.xlabel('Precision', fontsize=16)
-    plt.ylabel('Recall', fontsize=16)
-    plt.title('ChromShatter Precision-Recall Performance', fontsize=18)
-    plt.xlim(0, 1.02)
-    plt.ylim(0, 1.02)
-    plt.xticks(np.arange(0, 1.1, 0.2), [f"{int(x*100)}%" for x in np.arange(0, 1.1, 0.2)], fontsize=14)
-    plt.yticks(np.arange(0, 1.1, 0.2), [f"{int(x*100)}%" for x in np.arange(0, 1.1, 0.2)], fontsize=14)
-    plt.grid(True, linestyle='--', alpha=0.7)
-    plt.legend(fontsize=14, loc='lower left')
+    # 使用相同的参数重新分割数据
+    validation_size = min(300, max(100, int(0.1 * len(df_valid))))
     
-    output_path = os.path.join(OUTPUT_DIR, 'chromshatter_precision_recall.png')
-    plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    plt.show()
+    # 使用相同的随机种子进行分割
+    train_indices, val_indices = train_test_split(
+        range(len(df_valid)), 
+        test_size=validation_size, 
+        stratify=labels,
+        random_state=42
+    )
     
-    print(f"ChromShatter Precision-Recall图已保存到: {output_path}")
+    # 获取验证集对应的原始DataFrame
+    val_df = df_valid.iloc[val_indices].reset_index(drop=True)
+    
+    print(f"成功获取验证集对应的ShatterSeek结果: {val_df.shape}")
+    return val_df
 
-# 尝试加载包含ShatterSeek结果的验证集数据
-try:
-    # 假设验证集对应的原始数据包含ShatterSeek结果
-    # 这里需要根据实际数据路径进行调整
-    validation_data_path = os.path.join(BASE_DIR, "semi_supervised_learning/manual_label/merge.tsv")
-    val_df = pd.read_csv(validation_data_path, sep='\t')
-    
-    # 由于我们之前使用train_test_split分割了数据，需要获取对应的验证集索引
-    # 这里简化处理，假设验证集是按照相同的随机种子分割的
-    print(f"尝试加载验证集对应的ShatterSeek结果...")
-    
-    # 如果数据长度匹配，可以进行比较
-    if len(val_df) > len(val_labels):
-        print(f"原始数据长度({len(val_df)})大于验证集长度({len(val_labels)})")
-        print("无法直接匹配ShatterSeek结果，仅展示ChromShatter性能")
-        val_df = None
-    
-except Exception as e:
-    print(f"加载验证集对应的ShatterSeek结果时出错: {e}")
-    val_df = None
+# 获取验证集对应的ShatterSeek结果
+val_df = get_validation_shatterseek_results()
 
 # 执行与ShatterSeek的比较
 compare_with_shatterseek(best_model, val_features, val_labels, val_df)
