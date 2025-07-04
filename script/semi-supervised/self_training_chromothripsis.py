@@ -751,6 +751,17 @@ def compare_with_shatterseek(best_model, val_features, val_labels, val_df):
         precision_chromshatter, recall_chromshatter, f1_chromshatter,
         precision_shatterseek, recall_shatterseek, f1_shatterseek
     )
+    
+    # 打印详细的分类报告
+    print(f"\n" + "="*60)
+    print("详细分类报告")
+    print("="*60)
+    
+    print(f"\n=== ChromShatter (最优模型) 详细分类报告 ===")
+    print(classification_report(val_labels, best_pred, target_names=['非染色质碎裂', '染色质碎裂']))
+    
+    print(f"\n=== ShatterSeek 详细分类报告 ===")
+    print(classification_report(val_labels, shatterseek_pred, target_names=['非染色质碎裂', '染色质碎裂']))
 
 def plot_precision_recall_comparison(y_true, chromshatter_pred, shatterseek_pred,
                                    precision_cs, recall_cs, f1_cs,
