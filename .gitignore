@@ -10,7 +10,6 @@ model_data/train
 label_model_data/graph_dir/
 label_model_data/test/
 label_model_data/train/
-graph_dir/
 model_extended_data/test/
 model_extended_data/train/
 
